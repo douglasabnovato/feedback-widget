@@ -42,12 +42,14 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 - reactjs
 - typescript
 - tailwind
+- acessibilidade com headless
 
 ### 🛠 Construindo
  
 ---
 
-- tarefas
+- Componente
+- Propriedades
 
 ### 😯 Finalizado 
 
@@ -56,6 +58,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 - Construindo a aplicação em versões.
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
   <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/modo-0.jpg" width="400px"/>
+  <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/modo-1.jpg" width="400px"/>
 </p>
 
 ### 🧭 Adicionado
