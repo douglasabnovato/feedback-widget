@@ -16,6 +16,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
   <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/bootcamp.jpg" width="400px"/>
   <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/NLW-return- 2560x1600.png"  width="400px"/>
+  <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/Mobile 2 - NLW-return - 1242x2688.png"  height="400px"/>
 </p>
 - Desenvolver um widget para capturar feedback.
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
@@ -26,9 +27,6 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
   <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/template-1.jpg" width="400px"/>
 </p>
 - Seguir o paradigma mobile first para desenvolver o layout.
-<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/Mobile 2 - NLW-return - 1242x2688.png"  height="400px"/>
-</p>
 
 ### 🚀 Layout
 
