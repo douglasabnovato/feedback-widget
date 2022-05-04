@@ -9,7 +9,6 @@ export function Widget(){
         setIsWidgetOpen(!isWidgetOpen)
     }
 
-
     return (
         <div className="absolute bottom-5 right-5">
             { isWidgetOpen && <p>Hello World.</p> }
