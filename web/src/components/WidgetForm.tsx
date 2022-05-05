@@ -10,7 +10,17 @@ export function WidgetForm(){
                 <CloseButton/>
             </header>
 
-            <p>Hello Word, dev!</p>
+            <div className="flex py-8 gap-2 w-full">
+                <button>
+                    Problema
+                </button>
+                <button>
+                    Ideia
+                </button>
+                <button>
+                    Outro
+                </button>
+            </div>
             
             <footer className="text-xs text-neutral-400">
                 Feito com 💜 <a href="https://google.com.br" className="underline underline-offset-2">Rocketseat</a>
