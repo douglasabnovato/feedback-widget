@@ -6,7 +6,7 @@ export function WidgetForm(){
         <div className="bg-zinc-900 p-4 relative rounded-2x1 mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem) md:w-auto]">
             
             <header>
-                <span>Deixe seu Feedback</span>
+                <span className="mx-6">Deixe seu Feedback </span>
                 <CloseButton/>
             </header>
 
