@@ -25,7 +25,7 @@ const feedbackTypes = {
             source: thoughtImageUrl,
             alt: "Imagem de um balão de pensamento"
         },
-    }
+    },
 }
 
 export function WidgetForm(){
@@ -39,15 +39,10 @@ export function WidgetForm(){
             </header>
 
             <div className="flex py-8 gap-2 w-full">
-                <button>
-                    Problema
-                </button>
-                <button>
-                    Ideia
-                </button>
-                <button>
-                    Outro
-                </button>
+                { Object.entries(feedbackTypes).map(([key, value]) => {
+                    console.log(key,value);
+                    return null;
+                }) }
             </div>
             
             <footer className="text-xs text-neutral-400">
@@ -56,5 +51,4 @@ export function WidgetForm(){
             
         </div>
     )
-
 }
