@@ -9,7 +9,7 @@ import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
 import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 
-const feedbackTypes = {
+export const feedbackTypes = {
     BUG: {
         title: "Problem",
         image: {
@@ -33,7 +33,7 @@ const feedbackTypes = {
     },
 }
 
-type FeedbackType = keyof typeof feedbackTypes;
+export type FeedbackType = keyof typeof feedbackTypes;
 
 export function WidgetForm(){
     const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null)
@@ -44,27 +44,12 @@ export function WidgetForm(){
                 <CloseButton/>
             </header>
             {!feedbackType ? ( 
-                <div className="flex py-8 gap-2 w-full">
-                    { Object.entries(feedbackTypes).map(([key, value]) => {
-                        return (
-                            <button 
-                                key={key}
-                                className="bg-zinc-800 rounded-lg py-5 w-24 flex-1 flex flex-col items-center gap-2 border-2 border-transparent hover:border-brand-500 focus:border-brand-500 focus:outline-none"
-                                type="button"
-                                onClick={() => setFeedbackType(key as FeedbackType)}
-                            >
-                                <img src={value.image.source} alt={value.image.alt} />
-                                <span>{value.title}</span>
-                            </button>
-                        );
-                    }) }
-                </div> 
+                <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType}/>
             ) : (
                 <div>
                     <p>Hello World.</p>
                     <FeedbackContentStep/>
                     <FeedbackSuccessStep/>
-                    <FeedbackTypeStep/>
                 </div>
             )}            
             <footer className="text-xs text-neutral-400">
