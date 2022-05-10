@@ -6,7 +6,6 @@ import thoughtImageUrl from "../../assets/thought.svg";
 
 import { CloseButton } from "../CloseButton";
 import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
-import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 
 export const feedbackTypes = {
@@ -49,7 +48,6 @@ export function WidgetForm(){
                 <div>
                     <p>Hello World.</p>
                     <FeedbackContentStep/>
-                    <FeedbackSuccessStep/>
                 </div>
             )}            
             <footer className="text-xs text-neutral-400">
