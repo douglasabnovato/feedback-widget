@@ -37,11 +37,7 @@ export type FeedbackType = keyof typeof feedbackTypes;
 export function WidgetForm(){
     const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null)
     return (
-        <div className="bg-zinc-900 p-4 relative rounded-2x1 mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem) md:w-auto]">            
-            <header>
-                <span className="mx-6">Leave yours Feedback</span>
-                <CloseButton/>
-            </header>
+        <div className="bg-zinc-900 p-4 relative rounded-2x1 mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem) md:w-auto]">                        
             {!feedbackType ? ( 
                 <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType}/>
             ) : (
