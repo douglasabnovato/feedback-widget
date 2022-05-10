@@ -1,10 +1,13 @@
 import { useState } from "react";
 
-import { CloseButton } from "./CloseButton";
+import bugImageUrl from "../../assets/bug.svg";
+import ideaImageUrl from "../../assets/idea.svg";
+import thoughtImageUrl from "../../assets/thought.svg";
 
-import bugImageUrl from "../assets/bug.svg";
-import ideaImageUrl from "../assets/idea.svg";
-import thoughtImageUrl from "../assets/thought.svg";
+import { CloseButton } from "../CloseButton";
+import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
+import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
+import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 
 const feedbackTypes = {
     BUG: {
@@ -33,17 +36,13 @@ const feedbackTypes = {
 type FeedbackType = keyof typeof feedbackTypes;
 
 export function WidgetForm(){
-
     const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null)
-
     return (
-        <div className="bg-zinc-900 p-4 relative rounded-2x1 mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem) md:w-auto]">
-            
+        <div className="bg-zinc-900 p-4 relative rounded-2x1 mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem) md:w-auto]">            
             <header>
                 <span className="mx-6">Leave yours Feedback</span>
                 <CloseButton/>
             </header>
-
             {!feedbackType ? ( 
                 <div className="flex py-8 gap-2 w-full">
                     { Object.entries(feedbackTypes).map(([key, value]) => {
@@ -61,13 +60,16 @@ export function WidgetForm(){
                     }) }
                 </div> 
             ) : (
-                <p>Hello World.</p>
-            )}
-            
+                <div>
+                    <p>Hello World.</p>
+                    <FeedbackContentStep/>
+                    <FeedbackSuccessStep/>
+                    <FeedbackTypeStep/>
+                </div>
+            )}            
             <footer className="text-xs text-neutral-400">
                 Done with 💜 <a href="https://google.com.br" className="underline underline-offset-2">Rocketseat</a>
-            </footer>
-            
+            </footer>            
         </div>
     )
 }
