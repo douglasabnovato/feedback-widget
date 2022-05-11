@@ -51,6 +51,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
 - Componente
 - Propriedades
+- Comunicação entre os componentes reactjs
 
 ### 😯 Finalizado 
 
