@@ -44,6 +44,9 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 - typescript
 - tailwind
 - acessibilidade com headless
+- pixel perfect
+- navegação pelo teclado
+- ux
 
 ### 🛠 Construindo
  
