@@ -80,6 +80,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 ### 💻 Próximo passo
 
 - fazer o translate da aplicação: português inglês
+- responsividade de forma fluída
 
 ---  
 
