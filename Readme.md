@@ -49,6 +49,11 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
  
 ---
 
+#### back
+- setup da aplicação
+
+
+#### front
 - Componentização
 - Propriedades
 - Comunicação entre os componentes no reactjs
