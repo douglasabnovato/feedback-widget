@@ -2,8 +2,12 @@ import express from "express";
 
 const app = express();
 
-app.get("/users", (request, response) => {
+app.post("/users", (request, response) => {
     return response.send("Hello World, Dev.");
+})
+
+app.post("/feedbacks", (request, response) => {
+    return response.send("Hello World, Dev!!");
 })
 
 app.listen(3333, () => {
