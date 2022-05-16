@@ -45,13 +45,26 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 - tailwind
 - acessibilidade com headless
 
+### 🚀 Ferramentas
+
+---
+
+- [!mailtrap](.github/tools-1-mailtrap.jpg)
+- [!vercel](.github/tools-2-vercel.jpg)
+- [!railway](.github/tools-3-railway.jpg)
+- [!vercel](.github/tools-4-vercel.jpg)
+
 ### 🛠 Construindo
  
 ---
 
 #### back
 - setup da aplicação
-
+- rota
+- prisma para banco de dados
+- estrutura do banco de dados: tabela feedback
+- enviar email com a mailtrap
+- teste unitário com  jest
 
 #### front
 - Componentização
@@ -89,6 +102,10 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
 - fazer o translate da aplicação: português inglês
 - responsividade de forma fluída
+- tema dark e light
+- melhorar o html do e-mail
+- dashboard dos feedbacks com autenticação usando firebase/oAuth
+- validação de campos e erros
 
 ---  
 
