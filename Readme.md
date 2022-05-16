@@ -49,10 +49,13 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
 ---
 
-- [!mailtrap](.github/tools-1-mailtrap.jpg)
-- [!vercel](.github/tools-2-vercel.jpg)
-- [!railway](.github/tools-3-railway.jpg)
-- [!vercel](.github/tools-4-vercel.jpg)
+- A seguir temos as ferramentas que compõem essa aplicação. O mailtrap responsável por enviar por e-mail as informações do feedback, o vercel que hospeda o módulo backend e o railway que hospeda o banco de dados e o backend.
+<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
+  <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/tools-1-mailtrap.jpg" width="400px"/>
+  <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/tools-2-vercel.jpg"  width="400px"/>
+  <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/tools-3-railway.jpg"  height="400px"/>
+  <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/tools-4-vercel.jpg"  height="400px"/>
+</p>
 
 ### 🛠 Construindo
  
