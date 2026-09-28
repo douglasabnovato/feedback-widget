@@ -8,6 +8,26 @@
 
 Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
+### ✅ Estado atual (v2)
+
+- Widget em português, acessível (axe 0 violações), com mensagens de erro e captura só da área visível.
+- API Express 5 + TypeScript: validação com zod, escape do HTML do e-mail, CORS por lista, limite de 5 envios/min e de 4 MB por captura.
+- Credenciais SMTP e banco via `.env` (veja `server/.env.example`); sem SMTP a API registra no console, sem banco usa memória.
+- 13 testes (10 Jest na API + 3 Vitest no widget).
+
+```sh
+cd server && cp .env.example .env && npm install && npx prisma generate && npm run dev   # :3333
+cd web && cp .env.example .env && npm install && npm run dev                           # :5173
+```
+
+### 🌐 Em produção
+
+- Widget: https://feedback-widget-web.onrender.com · API: https://feedback-widget-api.onrender.com/health
+- Hospedagem gratuita: Render (API + site estático no mesmo `render.yaml`) com PostgreSQL no Neon, publicada a cada push na `main`.
+- Passo a passo completo (Mailtrap, Neon, Render, CI e conferência): [docs/DEPLOY.md](docs/DEPLOY.md).
+
+Documentação: [docs/ANALISE.md](docs/ANALISE.md) · [docs/ARQUITETURA.md](docs/ARQUITETURA.md) · [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md) · [docs/DEPLOY.md](docs/DEPLOY.md)
+
 ### 💻 Sobre o projeto
 
 ---
@@ -49,7 +69,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
 ---
 
-- A seguir temos as ferramentas que compõem essa aplicação. O mailtrap responsável por enviar por e-mail as informações do feedback, o vercel que hospeda o módulo backend e o railway que hospeda o banco de dados e o backend.
+- A seguir temos as ferramentas que compõem essa aplicação. O mailtrap responsável por enviar por e-mail as informações do feedback. Na versão original, o vercel hospedava o front e o railway, o banco de dados e o backend; hoje tudo roda no Render com o banco no Neon (veja [docs/DEPLOY.md](docs/DEPLOY.md)).
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
   <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/tools-1-mailtrap.jpg" width="400px"/>
   <img alt="Um widget para deixar feedback" title="#Feedback Widget" src="./.github/tools-2-vercel.jpg"  width="400px"/>

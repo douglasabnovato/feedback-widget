@@ -1,0 +1,40 @@
+# Blueprint do Render (plano gratuito): API + widget estático no mesmo Blueprint; banco PostgreSQL no Neon
+services:
+  - type: web
+    name: feedback-widget-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci && npm run build && npm run migrate
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: CORS_ORIGINS
+        value: https://feedback-widget-web.onrender.com
+      - key: DATABASE_URL
+        sync: false
+      - key: MAIL_HOST
+        value: sandbox.smtp.mailtrap.io
+      - key: MAIL_PORT
+        value: "2525"
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASS
+        sync: false
+      - key: MAIL_TO
+        sync: false
+  - type: web
+    name: feedback-widget-web
+    runtime: static
+    rootDir: web
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: VITE_API_URL
+        value: https://feedback-widget-api.onrender.com
