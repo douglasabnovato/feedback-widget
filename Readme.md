@@ -22,7 +22,8 @@ cd web && cp .env.example .env && npm install && npm run dev                    
 
 ### 🌐 Em produção
 
-- Widget: https://feedback-widget-web.onrender.com · API: https://feedback-widget-api.onrender.com/health
+- Site: https://nlw-8-impulse-nu.vercel.app/
+- API e widget no Render: ainda não publicados; o `render.yaml` está pronto.
 - Hospedagem gratuita: Render (API + site estático no mesmo `render.yaml`) com PostgreSQL no Neon, publicada a cada push na `main`.
 - Passo a passo completo (Mailtrap, Neon, Render, CI e conferência): [docs/DEPLOY.md](docs/DEPLOY.md).
 
