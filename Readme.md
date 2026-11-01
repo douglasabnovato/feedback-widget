@@ -20,6 +20,16 @@ cd server && cp .env.example .env && npm install && npx prisma generate && npm r
 cd web && cp .env.example .env && npm install && npm run dev                           # :5173
 ```
 
+### 🧩 Instalar o widget em outro site
+
+`cd web && npm run build:widget` gera um único arquivo, `web/dist-widget/feedget.js`. Hospede esse arquivo e adicione ao site:
+
+```html
+<script src="https://seu-dominio/feedget.js" data-api-url="https://sua-api"></script>
+```
+
+O widget roda em um Shadow DOM, sem alterar os estilos da página. O domínio do site precisa estar na lista de CORS da API.
+
 ### 🌐 Em produção
 
 - Site: https://nlw-8-impulse-nu.vercel.app/
@@ -134,3 +144,10 @@ Documentação: [docs/ANALISE.md](docs/ANALISE.md) · [docs/ARQUITETURA.md](docs
 ---  
 
 Feito com ❤️ por Douglas A B Novato 👋🏽 [Entre em contato!](https://www.linkedin.com/in/douglasabnovato/)
+
+## Próximos passos do responsável
+
+- Ver o log da Vercel e conferir o Root Directory, que pode precisar ser `web`.
+- Publicar a API e o widget com o `render.yaml`.
+
+Acompanhamento na issue #3.

@@ -12,3 +12,6 @@ node_modules
 .env
 .env.local
 dist
+dist-widget
+test-results
+playwright-report
