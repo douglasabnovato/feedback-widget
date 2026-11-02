@@ -18,8 +18,8 @@
 | 4 | Escopo enxuto | O que não entra está registrado | Atende: widget e API, sem painel |
 | 5 | Medição de uso | A métrica principal é coletada | Não atende: nada coleta uso |
 | 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Atende: o widget mostra erros, segundo os testes e o README |
-| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não medido neste ciclo |
-| 8 | Acessibilidade básica | Lighthouse e teclado | Parcial: axe sem violações segundo o README |
+| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não medido: o Lighthouse falhou nas 3 execuções na página da Vercel |
+| 8 | Acessibilidade básica | Lighthouse e teclado | Parcial: axe aponta a falta de região principal e de título h1 na página publicada; widget testado no PR #9, ainda sem merge |
 | 9 | Segurança e conformidade | Riscos decididos; termos de terceiros cumpridos | Atende no código: zod, escape, CORS e limite de envios |
 | 10 | Entrega confiável | Publicação só depois de CI verde | Não atende: **o deploy da Vercel falha na `main`**, e o Render não existe (#3) |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: 10 testes da API e 3 do widget |
@@ -38,3 +38,7 @@
 ## 3. Fora do MVP
 
 Painel de leitura, contas e métricas por site. A lista é uma proposta e pode mudar com a decisão do responsável.
+
+## Medições de 02/11/2026
+
+Lighthouse falhou nas 3 execuções; o axe apontou 2 alertas moderados. Lighthouse 12.8.2 local, perfil móvel simulado, sem aparelho real.
