@@ -2,9 +2,9 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches: [main, "developer/**"]
   pull_request:
-    branches: [main]
+    branches: [main, "developer/**"]
 permissions:
   contents: read
 jobs:
@@ -39,3 +39,6 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - run: npm run build:widget
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:widget
