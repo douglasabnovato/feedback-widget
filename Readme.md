@@ -8,12 +8,35 @@
 
 Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
+## Estado e próximos passos (ciclo de 03/11/2026)
+
+**No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 06/11/2026, mas é um build antigo: o deploy da Vercel falha desde 28/09 (#11). A API não está publicada (#3), então o envio pela demo falha.
+
+**O que foi feito**
+- Widget em script único (`feedget.js`, Shadow DOM), trazido do PR #9 e integrado pelo fluxo de sprint; fecha a #6.
+- A demo ganhou região principal, título e um aviso quando não há API publicada, com 3 testes.
+- CI também nos PRs para `developer/**`; Playwright 1.65.0.
+- `server/prisma/dev.db` saiu do Git.
+- Antes deste ciclo: PR #8 com os próximos passos do responsável e as medições de 02/11/2026.
+
+**O que queremos fazer**
+- #3 Publicar a API e o banco no Render e no Neon (responsável).
+- #11 Corrigir o deploy da Vercel (responsável).
+- #12 Proteger a `main` com PR e CI obrigatórios (responsável).
+- #13 Medir LCP e acessibilidade da demo publicada.
+- #14 Testar o widget em script único só com teclado.
+- #15 Confirmar a meta e ligar a medição de uso (responsável).
+
+**Onde está a documentação**
+- Estado dos critérios: [`docs/MVP.md`](docs/MVP.md)
+- Plano do ciclo: [`docs/PLANO-DE-ACAO.md`](docs/PLANO-DE-ACAO.md)
+
 ### ✅ Estado atual (v2)
 
 - Widget em português, acessível (axe 0 violações), com mensagens de erro e captura só da área visível.
 - API Express 5 + TypeScript: validação com zod, escape do HTML do e-mail, CORS por lista, limite de 5 envios/min e de 4 MB por captura.
 - Credenciais SMTP e banco via `.env` (veja `server/.env.example`); sem SMTP a API registra no console, sem banco usa memória.
-- 13 testes (10 Jest na API + 3 Vitest no widget).
+- 17 testes (10 Jest na API, 6 Vitest no web e 1 Playwright do script único).
 
 ```sh
 cd server && cp .env.example .env && npm install && npx prisma generate && npm run dev   # :3333
@@ -32,7 +55,7 @@ O widget roda em um Shadow DOM, sem alterar os estilos da página. O domínio do
 
 ### 🌐 Em produção
 
-- Site: https://nlw-8-impulse-nu.vercel.app/
+- Site: https://nlw-8-impulse-nu.vercel.app/ (build antigo; o deploy da Vercel falha desde 28/09, #11)
 - API e widget no Render: ainda não publicados; o `render.yaml` está pronto.
 - Hospedagem gratuita: Render (API + site estático no mesmo `render.yaml`) com PostgreSQL no Neon, publicada a cada push na `main`.
 - Passo a passo completo (Mailtrap, Neon, Render, CI e conferência): [docs/DEPLOY.md](docs/DEPLOY.md).
@@ -150,4 +173,4 @@ Feito com ❤️ por Douglas A B Novato 👋🏽 [Entre em contato!](https://www
 - Ver o log da Vercel e conferir o Root Directory, que pode precisar ser `web`.
 - Publicar a API e o widget com o `render.yaml`.
 
-Acompanhamento na issue #3.
+Acompanhamento nas issues #3, #11, #12 e #15.
