@@ -1,0 +1,14 @@
+/* Estilos do script único; a base do Tailwind fica presa ao Shadow DOM */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:host {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483000;
+  color: #f4f4f5;
+  font-family: sans-serif;
+}
+/* Fim de embed.css */
