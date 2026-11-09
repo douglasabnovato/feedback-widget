@@ -20,21 +20,25 @@ export function Widget(){
         toggleButton.current?.focus();
     };
 
-    /* Esc fecha o formulário; com o foco no widget aberto, Tab e Shift+Tab circulam dentro dele.
+    /* Com o foco no widget aberto, Esc fecha e Tab e Shift+Tab circulam dentro dele.
+       O widget não é modal: tecla feita fora dele segue a página (inclusive o Esc).
        Dentro de Shadow DOM, document.activeElement aponta o host, então o foco
        atual vem da raiz do próprio widget (getRootNode). */
     useEffect(() => {
         if (!isOpen) return undefined;
         const onKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                close();
-                return;
-            }
-            if (event.key !== "Tab" || !container.current) return;
-            /* O widget não é modal: Tab feito fora dele segue a ordem da página */
+            if ((event.key !== "Escape" && event.key !== "Tab") || !container.current) return;
             const raiz = container.current.getRootNode() as Document | ShadowRoot;
             const atual = raiz.activeElement;
-            if (!(atual instanceof HTMLElement) || !container.current.contains(atual)) return;
+            const dentro = atual instanceof HTMLElement && container.current.contains(atual);
+            if (event.key === "Escape") {
+                /* Sem foco em lugar nenhum (clique no fundo do painel, botão que sumiu
+                   ou ficou desabilitado), o Esc ainda fecha; com foco na página, não */
+                const semFoco = !document.activeElement || document.activeElement === document.body;
+                if (dentro || semFoco) close();
+                return;
+            }
+            if (!dentro) return;
             const focaveis = Array.from(container.current.querySelectorAll<HTMLElement>(FOCAVEIS))
                 .filter((el) => el.tabIndex >= 0 && el.getClientRects().length > 0);
             if (focaveis.length === 0) return;

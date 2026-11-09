@@ -8,22 +8,21 @@
 
 Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
-## Estado e próximos passos (ciclo de 07/11/2026)
+## Estado e próximos passos (ciclo de 09/11/2026)
 
 **No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 09/11/2026, mas é um build antigo: o deploy da Vercel falha desde 28/09 por configuração (#11). A API não está publicada (#3), então o envio pela demo falha.
 
 **O que foi feito neste ciclo**
-- O widget aberto prende Tab e Shift+Tab, inclusive no script único com Shadow DOM, e Esc devolve o foco ao botão. Três testes Playwright de teclado no CI (#14).
-- O [`docs/MVP.md`](docs/MVP.md) tem uma tabela só, a atual; as anteriores estão no Histórico.
-- Antes (ciclo de 03/11): widget em script único (#6), região principal e título na demo, CI nos PRs para `developer/**`.
+- O formulário abre como diálogo com o nome do passo, e o foco vai para dentro dele em cada passo; o Esc só fecha com o foco no widget (#18).
+- Medição local da demo: LCP mediano de 1,63 s e acessibilidade 100 no Lighthouse móvel.
+- Antes (ciclo de 07/11): Tab e Shift+Tab presos ao widget aberto, inclusive no script único com Shadow DOM (#14).
 
 **O que queremos fazer**
 - #3 Publicar a API e o banco no Render e no Neon (responsável).
 - #11 Corrigir o deploy da Vercel (responsável).
 - #12 Proteger a `main` com PR e CI obrigatórios (responsável).
-- #13 Medir LCP e acessibilidade da demo publicada.
+- #13 Medir LCP e acessibilidade da demo publicada, depois da #11.
 - #15 Confirmar a meta e ligar a medição de uso (responsável).
-- #18 Anunciar o widget como diálogo e focar o primeiro botão ao abrir.
 
 **Onde está a documentação**
 - Estado dos critérios: [`docs/MVP.md`](docs/MVP.md)
