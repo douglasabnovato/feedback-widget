@@ -4,30 +4,56 @@ import { ChatTeardropDots } from "@phosphor-icons/react";
 
 import { WidgetForm } from "./WidgetForm";
 
+/* Elementos que recebem foco por Tab dentro do widget */
+const FOCAVEIS = 'button:not([disabled]), [href], textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /* Fecha o formulário e devolve o foco ao botão */
 export const CloseWidgetContext = createContext<() => void>(() => undefined);
 
 export function Widget(){
     const [isOpen, setIsOpen] = useState(false);
     const toggleButton = useRef<HTMLButtonElement>(null);
+    const container = useRef<HTMLDivElement>(null);
 
     const close = () => {
         setIsOpen(false);
         toggleButton.current?.focus();
     };
 
-    /* Esc fecha o formulário */
+    /* Esc fecha o formulário; com o foco no widget aberto, Tab e Shift+Tab circulam dentro dele.
+       Dentro de Shadow DOM, document.activeElement aponta o host, então o foco
+       atual vem da raiz do próprio widget (getRootNode). */
     useEffect(() => {
         if (!isOpen) return undefined;
         const onKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") close();
+            if (event.key === "Escape") {
+                close();
+                return;
+            }
+            if (event.key !== "Tab" || !container.current) return;
+            /* O widget não é modal: Tab feito fora dele segue a ordem da página */
+            const raiz = container.current.getRootNode() as Document | ShadowRoot;
+            const atual = raiz.activeElement;
+            if (!(atual instanceof HTMLElement) || !container.current.contains(atual)) return;
+            const focaveis = Array.from(container.current.querySelectorAll<HTMLElement>(FOCAVEIS))
+                .filter((el) => el.tabIndex >= 0 && el.getClientRects().length > 0);
+            if (focaveis.length === 0) return;
+            const primeiro = focaveis[0];
+            const ultimo = focaveis[focaveis.length - 1];
+            if (event.shiftKey && atual === primeiro) {
+                event.preventDefault();
+                ultimo.focus();
+            } else if (!event.shiftKey && atual === ultimo) {
+                event.preventDefault();
+                primeiro.focus();
+            }
         };
         document.addEventListener("keydown", onKeyDown);
         return () => document.removeEventListener("keydown", onKeyDown);
     }, [isOpen]);
 
     return (
-        <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex flex-col items-end">
+        <div ref={container} className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex flex-col items-end">
             {isOpen && (
                 <div className="text-white">
                     <CloseWidgetContext.Provider value={close}>
