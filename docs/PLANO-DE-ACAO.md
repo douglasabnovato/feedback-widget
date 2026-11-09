@@ -13,6 +13,34 @@ Timebox: 60 min.
 | Should | Acessibilidade e pt-BR (D7) | Médio | Baixo | ✅ axe 0 |
 | Could | Painel de leitura dos feedbacks | Alto | Médio | Próximo ciclo |
 
+## Ciclo de 07/11/2026
+
+> Executado em 09/11/2026. Branch `feature/2026-11-07` → `developer/sprint-2026-11-12` → `main` (o merge na `main` fica com o responsável). Nível: Vitrine (N2), 12 critérios. Escopo: só o que o código resolve. O status da Vercel está vermelho desde 28/09 por configuração (#11); vale o CI do GitHub.
+
+### Produto
+- **Problema e público:** donos de site instalam o widget com uma tag `<script>`; quem visita precisa conseguir enviar feedback também sem mouse.
+- **Hipótese e meta:** se o widget funcionar só com teclado, nenhum visitante fica preso nele nem sem caminho de envio. Meta: abrir, escolher o tipo, escrever e enviar só com Tab, Enter e Esc, com teste no CI (#14).
+- **O que a pesquisa trouxe:**
+  - No padrão de diálogo do WAI-ARIA, Tab e Shift+Tab circulam dentro do diálogo aberto, Esc fecha e o foco volta a quem abriu ([W3C APG, diálogo modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)).
+  - Dentro de Shadow DOM, `document.activeElement` aponta o host; o foco real está em `shadowRoot.activeElement`, e muitas bibliotecas de armadilha de foco não tratam isso ([MDN, ShadowRoot.activeElement](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot/activeElement); [Nolan Lawson, foco no Shadow DOM](https://nolanlawson.com/2021/02/13/managing-focus-in-the-shadow-dom/)).
+- **Backlog (impacto × esforço):**
+  1. Tab e Shift+Tab presos ao widget aberto, com o foco lido da raiz do próprio widget (alto × baixo). Este ciclo.
+  2. Testes Playwright de teclado no script único (alto × baixo). Este ciclo.
+  3. Mover o foco para o primeiro elemento ao abrir e anunciar o widget como diálogo (`role="dialog"`, nome) (médio × baixo). Issue.
+  4. Deploy da Vercel (#11), API no Render (#3), proteção da `main` (#12), meta e medição (#15). Responsável.
+- **Fora do escopo:** configuração da Vercel e do Render.
+
+### Engenharia
+- **Arquitetura:** API Express + Prisma em `server/`; widget React em `web/`, distribuído como `feedget.js`, que monta o React num Shadow DOM. O `Widget` guarda a abertura, fecha com Esc e devolve o foco ao botão.
+- **Mudança:** o `keydown` do widget aberto também trata Tab: lista os focáveis do contêiner e, no último (ou fora dele), volta ao primeiro; com Shift, ao contrário. O foco atual vem de `getRootNode().activeElement`, que funciona dentro e fora do Shadow DOM.
+- **Riscos:** elementos que aparecem depois (captura de tela) entram na lista porque ela é refeita a cada Tab.
+- **Qualidade:** `web/e2e/teclado.spec.ts` (3 testes) roda no passo `test:widget` do CI; o teste da armadilha falha sem a mudança.
+- **Definição de pronto:** CI do GitHub verde, PR para a sprint mesclado e PR para a `main` aberto com `revisao-responsavel`.
+
+### Plano de ação
+- **Executa:** armadilha de foco e testes de teclado (#14); `MVP.md` com uma tabela só; README.
+- **Vira issue:** foco inicial e papel de diálogo; o restante segue com o responsável (#3, #11, #12, #15) e a medição do site (#13).
+
 ## Ciclo de 03/11/2026
 
 > Executado em 06/11/2026. Branch `feature/2026-11-06` → `developer/sprint-2026-11-12` → `main`. Nível: Vitrine (N2), 12 critérios. Antes do ciclo, o PR #8 (`developer/sprint-2026-11-05`, só documentação) foi integrado na `main`.
