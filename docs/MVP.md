@@ -15,10 +15,10 @@
 | 5 | Medição de uso | Não atende | Nada coleta uso | #15 (responsável) |
 | 6 | Falhas tratadas | Atende | O widget mostra erro de envio e aviso sem API, com testes em `web/src/__tests__` (`npx vitest run`: 6 de 6 em 09/11/2026) | — |
 | 7 | Desempenho aceitável | Não medido | A Vercel serve um build antigo (`curl` deu 200 em 09/11/2026, mas o deploy falha desde 28/09) | #11 (responsável), #13 |
-| 8 | Acessibilidade básica | Parcial | Script único só com teclado: Tab e Shift+Tab ficam no widget, Esc devolve o foco (`npx playwright test` em 09/11/2026: 4 de 4; o teste da armadilha falha sem a mudança). Falta o Lighthouse no site, que serve build antigo, e o papel de diálogo | #13, #18 |
+| 8 | Acessibilidade básica | Parcial | Script único só com teclado: Tab e Shift+Tab ficam no widget, Esc devolve o foco (`npx playwright test` em 09/11/2026: 6 de 6; o teste da armadilha falha sem a mudança). Falta o Lighthouse no site, que serve build antigo, e o papel de diálogo | #13, #18 |
 | 9 | Segurança e conformidade | Atende | zod, escape no e-mail, CORS por lista e limite de envios, com testes da API | — |
 | 10 | Entrega confiável | Não atende | Status da Vercel vermelho desde 28/09 por configuração; `main` sem proteção | #11, #12 (responsável) |
-| 11 | Testes dos fluxos críticos | Atende | CI do GitHub: 10 testes da API, 6 do web e 4 Playwright do script único | — |
+| 11 | Testes dos fluxos críticos | Atende | CI do GitHub: 10 testes da API, 6 do web e 6 Playwright do script único | — |
 | 12 | Documentação honesta | Atende | README e este arquivo dizem que a demo publicada é antiga e que a API não está no ar | — |
 
 **Atendidos:** 1, 4, 6, 9, 11 e 12. **Parciais:** 2, 3 e 8. **Não atendidos:** 5 e 10. **Não medido:** 7.
