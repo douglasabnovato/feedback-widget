@@ -20,7 +20,7 @@ export function Widget(){
         toggleButton.current?.focus();
     };
 
-    /* Esc fecha o formulário; Tab e Shift+Tab circulam só dentro do widget aberto.
+    /* Esc fecha o formulário; com o foco no widget aberto, Tab e Shift+Tab circulam dentro dele.
        Dentro de Shadow DOM, document.activeElement aponta o host, então o foco
        atual vem da raiz do próprio widget (getRootNode). */
     useEffect(() => {
@@ -31,17 +31,19 @@ export function Widget(){
                 return;
             }
             if (event.key !== "Tab" || !container.current) return;
-            const focaveis = Array.from(container.current.querySelectorAll<HTMLElement>(FOCAVEIS));
-            if (focaveis.length === 0) return;
+            /* O widget não é modal: Tab feito fora dele segue a ordem da página */
             const raiz = container.current.getRootNode() as Document | ShadowRoot;
             const atual = raiz.activeElement;
+            if (!(atual instanceof HTMLElement) || !container.current.contains(atual)) return;
+            const focaveis = Array.from(container.current.querySelectorAll<HTMLElement>(FOCAVEIS))
+                .filter((el) => el.tabIndex >= 0 && el.getClientRects().length > 0);
+            if (focaveis.length === 0) return;
             const primeiro = focaveis[0];
             const ultimo = focaveis[focaveis.length - 1];
-            const dentro = atual instanceof HTMLElement && container.current.contains(atual);
-            if (event.shiftKey && (!dentro || atual === primeiro)) {
+            if (event.shiftKey && atual === primeiro) {
                 event.preventDefault();
                 ultimo.focus();
-            } else if (!event.shiftKey && (!dentro || atual === ultimo)) {
+            } else if (!event.shiftKey && atual === ultimo) {
                 event.preventDefault();
                 primeiro.focus();
             }

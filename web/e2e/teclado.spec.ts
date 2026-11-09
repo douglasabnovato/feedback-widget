@@ -69,6 +69,27 @@ test("Tab e Shift+Tab não saem do widget aberto", async ({ page }) => {
   }
 });
 
+test("Tab no último volta ao primeiro, e Shift+Tab no primeiro vai ao último", async ({ page }) => {
+  await prepararPagina(page);
+  await tabAte(page, "Abrir formulário de feedback");
+  await page.keyboard.press("Enter");
+  // O botão que abre fica depois do formulário: é o último focável do widget
+  await page.keyboard.press("Tab");
+  const primeiro = await focado(page);
+  expect(primeiro).not.toBe("fora");
+  expect(primeiro).not.toBe("Abrir formulário de feedback");
+  await page.keyboard.press("Shift+Tab");
+  expect(await focado(page)).toBe("Abrir formulário de feedback");
+});
+
+test("com o widget aberto, Tab feito na página segue a ordem da página", async ({ page }) => {
+  await prepararPagina(page);
+  await page.getByRole("button", { name: "Abrir formulário de feedback" }).click();
+  await page.locator("#link-pagina").focus();
+  await page.keyboard.press("Shift+Tab");
+  expect(await focado(page)).toBe("fora");
+});
+
 test("Esc fecha e devolve o foco ao botão que abriu", async ({ page }) => {
   await prepararPagina(page);
   await tabAte(page, "Abrir formulário de feedback");
