@@ -3,20 +3,23 @@ import { FeedbackType, feedbackTypes } from "..";
 import { CloseButton } from "../../CloseButton";
 
 interface FeedbackTypeStepProps {
+    titleId: string;
     onFeedbackTypeChanged: (type: FeedbackType) => void;
 }
 
-export function FeedbackTypeStep({ onFeedbackTypeChanged }: FeedbackTypeStepProps) {
+export function FeedbackTypeStep({ titleId, onFeedbackTypeChanged }: FeedbackTypeStepProps) {
     return (
         <>
             <header>
-                <h2 className="text-xl leading-6 mx-6">Deixe seu feedback</h2>
+                <h2 id={titleId} className="text-xl leading-6 mx-6">Deixe seu feedback</h2>
                 <CloseButton />
             </header>
             <div className="flex py-8 gap-2 w-full">
-                {Object.entries(feedbackTypes).map(([key, value]) => (
+                {Object.entries(feedbackTypes).map(([key, value], index) => (
                     <button
                         key={key}
+                        /* Ao abrir (ou voltar a este passo), o foco vai para o primeiro tipo */
+                        autoFocus={index === 0}
                         className="bg-zinc-800 rounded-lg py-5 w-24 flex-1 flex flex-col items-center gap-2 border-2 border-transparent hover:border-brand-500 focus:border-brand-500 focus:outline-none"
                         type="button"
                         onClick={() => onFeedbackTypeChanged(key as FeedbackType)}

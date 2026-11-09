@@ -69,16 +69,42 @@ test("Tab e Shift+Tab não saem do widget aberto", async ({ page }) => {
   }
 });
 
-test("Tab no último volta ao primeiro, e Shift+Tab no primeiro vai ao último", async ({ page }) => {
+test("ao abrir, o foco vai ao primeiro tipo, dentro de um diálogo com nome (#18)", async ({ page }) => {
   await prepararPagina(page);
   await tabAte(page, "Abrir formulário de feedback");
   await page.keyboard.press("Enter");
-  // O botão que abre fica depois do formulário: é o último focável do widget
-  await page.keyboard.press("Tab");
-  const primeiro = await focado(page);
-  expect(primeiro).not.toBe("fora");
-  expect(primeiro).not.toBe("Abrir formulário de feedback");
+  await expect(page.getByRole("dialog", { name: "Deixe seu feedback" })).toBeVisible();
+  expect(await focado(page)).toBe("Problema");
+});
+
+test("Shift+Tab no primeiro vai ao último, e Tab no último volta ao primeiro", async ({ page }) => {
+  await prepararPagina(page);
+  await tabAte(page, "Abrir formulário de feedback");
+  await page.keyboard.press("Enter");
+  // O primeiro focável é o "Fechar", no cabeçalho; o último é o botão que abre, depois do formulário
   await page.keyboard.press("Shift+Tab");
+  expect(await focado(page)).toBe("Fechar formulário de feedback");
+  await page.keyboard.press("Shift+Tab");
+  expect(await focado(page)).toBe("Abrir formulário de feedback");
+  await page.keyboard.press("Tab");
+  expect(await focado(page)).toBe("Fechar formulário de feedback");
+});
+
+test("Esc na página, com o widget aberto, não fecha o widget", async ({ page }) => {
+  await prepararPagina(page);
+  await page.getByRole("button", { name: "Abrir formulário de feedback" }).click();
+  await page.locator("#link-pagina").focus();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "Deixe seu feedback" })).toBeVisible();
+});
+
+test("fechar pelo botão devolve o foco ao botão que abriu", async ({ page }) => {
+  await prepararPagina(page);
+  await tabAte(page, "Abrir formulário de feedback");
+  await page.keyboard.press("Enter");
+  await tabAte(page, "Fechar formulário de feedback");
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   expect(await focado(page)).toBe("Abrir formulário de feedback");
 });
 
