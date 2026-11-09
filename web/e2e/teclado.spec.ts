@@ -81,7 +81,8 @@ test("Shift+Tab no primeiro vai ao último, e Tab no último volta ao primeiro",
   await prepararPagina(page);
   await tabAte(page, "Abrir formulário de feedback");
   await page.keyboard.press("Enter");
-  // O primeiro focável é o "Fechar", no cabeçalho; o último é o botão que abre, depois do formulário
+  // O foco abre em "Problema"; o Shift+Tab leva ao "Fechar" (primeiro focável, no cabeçalho) pela ordem normal.
+  // Dali, a armadilha leva ao último (o botão que abre, depois do formulário) e o Tab volta ao primeiro.
   await page.keyboard.press("Shift+Tab");
   expect(await focado(page)).toBe("Fechar formulário de feedback");
   await page.keyboard.press("Shift+Tab");
@@ -96,6 +97,14 @@ test("Esc na página, com o widget aberto, não fecha o widget", async ({ page }
   await page.locator("#link-pagina").focus();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog", { name: "Deixe seu feedback" })).toBeVisible();
+});
+
+test("Esc fecha depois de um clique no fundo do painel, que tira o foco de tudo", async ({ page }) => {
+  await prepararPagina(page);
+  await page.getByRole("button", { name: "Abrir formulário de feedback" }).click();
+  await page.getByRole("heading", { name: "Deixe seu feedback" }).click();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
 });
 
 test("fechar pelo botão devolve o foco ao botão que abriu", async ({ page }) => {

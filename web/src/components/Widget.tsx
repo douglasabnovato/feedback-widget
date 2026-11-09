@@ -30,11 +30,15 @@ export function Widget(){
             if ((event.key !== "Escape" && event.key !== "Tab") || !container.current) return;
             const raiz = container.current.getRootNode() as Document | ShadowRoot;
             const atual = raiz.activeElement;
-            if (!(atual instanceof HTMLElement) || !container.current.contains(atual)) return;
+            const dentro = atual instanceof HTMLElement && container.current.contains(atual);
             if (event.key === "Escape") {
-                close();
+                /* Sem foco em lugar nenhum (clique no fundo do painel, botão que sumiu
+                   ou ficou desabilitado), o Esc ainda fecha; com foco na página, não */
+                const semFoco = !document.activeElement || document.activeElement === document.body;
+                if (dentro || semFoco) close();
                 return;
             }
+            if (!dentro) return;
             const focaveis = Array.from(container.current.querySelectorAll<HTMLElement>(FOCAVEIS))
                 .filter((el) => el.tabIndex >= 0 && el.getClientRects().length > 0);
             if (focaveis.length === 0) return;

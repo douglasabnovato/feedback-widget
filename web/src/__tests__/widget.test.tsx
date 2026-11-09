@@ -92,5 +92,14 @@ describe("Widget como diálogo (#18)", () => {
     await userEvent.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).toBeNull();
   });
+
+  it("Esc fecha quando o foco caiu no corpo da página (clique no fundo do painel)", async () => {
+    render(<Widget />);
+    await userEvent.click(screen.getByRole("button", { name: "Abrir formulário de feedback" }));
+    (document.activeElement as HTMLElement).blur();
+    expect(document.activeElement).toBe(document.body);
+    await userEvent.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
 });
 /* Fim de widget.test.tsx */
