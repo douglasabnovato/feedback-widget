@@ -20,7 +20,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 **O que queremos fazer**
 - #3 Publicar a API e o banco no Render e no Neon (responsável).
 - #11 Corrigir o deploy da Vercel (responsável).
-- #12 Proteger a  com PR e CI obrigatórios (responsável).
+- #12 Proteger a `main` com PR e CI obrigatórios (responsável).
 - #13 Medir LCP e acessibilidade da demo publicada, depois da #11.
 - #15 Confirmar a meta e ligar a medição de uso (responsável).
 
