@@ -13,6 +13,32 @@ Timebox: 60 min.
 | Should | Acessibilidade e pt-BR (D7) | Médio | Baixo | ✅ axe 0 |
 | Could | Painel de leitura dos feedbacks | Alto | Médio | Próximo ciclo |
 
+## Ciclo de 09/11/2026
+
+> Executado em 09/11/2026. Branch `feature/2026-11-09`, criada a partir da `developer/sprint-2026-11-12`, com PR para a sprint. A `main` fica com o responsável (PR #21). Nível: Vitrine (N2). Escopo: só o que o código resolve (#18 e a medição local). O status da Vercel está vermelho por configuração (#11); vale o CI do GitHub.
+
+### Produto
+- **Problema e público:** quem usa leitor de tela ou só teclado abre o widget e não ouve que um formulário apareceu; o foco fica no botão que abriu.
+- **Hipótese e meta:** se o widget abrir como diálogo com nome e levar o foco para dentro, quem não usa mouse começa o envio sem procurar. Meta: `role="dialog"` com nome, foco inicial no primeiro tipo, Esc que não fecha quando o foco está na página, com teste no Vitest e no Playwright.
+- **O que a pesquisa trouxe:**
+  - No padrão de diálogo do WAI-ARIA, o contêiner tem `role="dialog"`, o nome vem do título visível por `aria-labelledby` e, ao abrir, o foco vai para um elemento dentro do diálogo, em geral o primeiro focável ([W3C APG, diálogo](https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/); [exemplo da W3C](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/dialog/)).
+- **Backlog (impacto × esforço):**
+  1. Diálogo com nome e foco inicial em cada passo (alto × baixo). Este ciclo.
+  2. Esc só com o foco no widget, pela revisão do PR #19 (médio × baixo). Este ciclo.
+  3. Lighthouse local da demo (médio × baixo). Este ciclo.
+  4. Deploy da Vercel (#11), API (#3), proteção da `main` (#12), meta e medição (#15). Responsável.
+- **Fora do escopo:** configuração da Vercel e do Render; mudança visual.
+
+### Engenharia
+- **Mudança:** `WidgetForm` cria um id (`useId`) e o passa ao título de cada passo; o contêiner tem `role="dialog"` e `aria-labelledby`. O foco vai, por `autoFocus`, para "Problema" (passo 1), para o comentário (passo 2) e para "Quero enviar outro" (sucesso). O `keydown` do widget fecha com Esc só se o foco estiver dentro dele ou em lugar nenhum (`document.body`), o que cobre o clique no fundo do painel.
+- **Riscos:** o diálogo não é modal: Tab feito na página segue a página, como antes.
+- **Qualidade:** Vitest 11 de 11 e Playwright 10 de 10 (script único com Shadow DOM) em 09/11/2026; Lighthouse local de acessibilidade 100.
+- **Definição de pronto:** CI do GitHub verde, PR para a sprint aberto ou mesclado, comentário no PR #21.
+
+### Plano de ação
+- **Executa:** #18; medição local do critério 7; `MVP.md`; README.
+- **Vira issue:** nada novo; seguem #13 (medir o site depois da #11) e as do responsável (#3, #11, #12, #15).
+
 ## Ciclo de 07/11/2026
 
 > Executado em 09/11/2026. Branch `feature/2026-11-07` → `developer/sprint-2026-11-12` → `main` (o merge na `main` fica com o responsável). Nível: Vitrine (N2), 12 critérios. Escopo: só o que o código resolve. O status da Vercel está vermelho desde 28/09 por configuração (#11); vale o CI do GitHub.
