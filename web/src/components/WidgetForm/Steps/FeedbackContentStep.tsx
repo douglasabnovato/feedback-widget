@@ -7,6 +7,7 @@ import { CloseButton } from "../../CloseButton";
 import { ScreenshotButton } from "../ScreenshotButton";
 import { api, errorMessage } from "../../../lib/api";
 import { Loading } from "../../Loading";
+import { registrarEvento } from "../../../lib/medicao";
 
 interface FeedbackContentStepProps {
     titleId: string;
@@ -30,6 +31,7 @@ export function FeedbackContentStep({ titleId, feedbackType, onFeedbackRestartRe
         setIsSendingFeedback(true);
         try {
             await api.post("/feedbacks", { type: feedbackType, comment, screenshot });
+            registrarEvento("enviar-feedback");
             onFeedbackSent();
         } catch (err) {
             setError(errorMessage(err));

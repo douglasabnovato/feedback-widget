@@ -8,21 +8,22 @@
 
 Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
-## Estado e próximos passos (ciclo de 09/11/2026)
+## Estado e próximos passos (ciclo de 10/11/2026)
 
-**No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 09/11/2026, mas é um build antigo: o deploy da Vercel falha desde 28/09 por configuração (#11). A API não está publicada (#3), então o envio pela demo falha.
+**No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 10/11/2026, mas é um build de 2022, de outro projeto da Vercel. O projeto novo (`feedback-widget-lfke`) falha em todo deploy por configuração (#11). A API não está publicada (#3), então o envio pela demo falha.
 
-**O que foi feito neste ciclo**
-- O formulário abre como diálogo com o nome do passo, e o foco vai para dentro dele em cada passo; o Esc só fecha com o foco no widget (#18).
-- Medição local da demo: LCP mediano de 1,63 s e acessibilidade 100 no Lighthouse móvel.
-- 10/11/2026: a `main` está protegida pelo ruleset `principal-protegida` (exige PR, bloqueia force push e exclusão) (#12). Critério 10 segue "Parcial" pela Vercel (#11). Critérios: 7 de 12 atendidos.
-- Antes (ciclo de 07/11): Tab e Shift+Tab presos ao widget aberto, inclusive no script único com Shadow DOM (#14).
+**O que foi feito neste ciclo** (PR #24)
+- Medição de uso sem cookie (GoatCounter, código `douglasabnovato`): só no build de produção fora de localhost, com o evento `enviar-feedback`. Falta a conta (#15).
+- Meta da hipótese decidida no ciclo (D1) e `main` exigindo os jobs `server` e `web` do CI (D3). Critérios: 9 de 12 atendidos.
+- Diagnóstico da Vercel na #11: a falha vem antes da instalação, então o conserto é no painel.
+- Antes (ciclo de 09/11): o formulário abre como diálogo, com foco dentro dele e Esc só no widget (#18); LCP local mediano de 1,63 s.
 
 **O que queremos fazer**
-- #3 Publicar a API e o banco no Render e no Neon (responsável).
-- #11 Corrigir o deploy da Vercel (responsável).
+- #3 Publicar a API e o banco no Render e no Neon (responsável; Blueprint pronto).
+- #11 Corrigir o deploy da Vercel (responsável; passo a passo na issue).
+- #15 Criar a conta do GoatCounter (responsável).
 - #13 Medir LCP e acessibilidade da demo publicada, depois da #11.
-- #15 Confirmar a meta e ligar a medição de uso (responsável).
+- #25 Validar com uma pessoa de fora.
 
 **Onde está a documentação**
 - Estado dos critérios: [`docs/MVP.md`](docs/MVP.md)
@@ -33,7 +34,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 - Widget em português, acessível (axe 0 violações), com mensagens de erro e captura só da área visível.
 - API Express 5 + TypeScript: validação com zod, escape do HTML do e-mail, CORS por lista, limite de 5 envios/min e de 4 MB por captura.
 - Credenciais SMTP e banco via `.env` (veja `server/.env.example`); sem SMTP a API registra no console, sem banco usa memória.
-- 17 testes (10 Jest na API, 6 Vitest no web e 1 Playwright do script único).
+- 35 testes (10 Jest na API, 15 Vitest no web e 10 Playwright do script único).
 
 ```sh
 cd server && cp .env.example .env && npm install && npx prisma generate && npm run dev   # :3333

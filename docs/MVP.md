@@ -1,35 +1,41 @@
 # MVP — Feedback Widget
 
-**Nível:** Vitrine (N2), 12 critérios. Estado em 10/11/2026 (ciclo de 09/11/2026; critério 10 revisto em 10/11/2026).
+**Nível:** Vitrine (N2), 12 critérios. Estado em 10/11/2026 (ciclo da faixa de 90%, decisões D1 a D7 em `engenharia/decisoes/2026-11-10-ciclo-faixa-90.md`).
 
-**Resumo:** 7 de 12 aplicáveis atendidos
+**Resumo:** 9 de 12 aplicáveis atendidos
 
-**Finalizado:** sim
+**Finalizado:** sim — faltam 3, 5 e 7, que dependem do responsável: publicar a API (#3), corrigir a Vercel (#11) e criar a conta do GoatCounter (#15); depois, medir no site (#13)
 
-| # | Critério | Situação em 09/11/2026 | Evidência ou o que falta | Issue |
+**Hipótese (meta do ciclo, texto da proposta mantido):** quem vê o widget na demo envia um feedback em menos de 1 minuto. Saberemos pelo GoatCounter: visitas à demo e o evento `enviar-feedback`, depois que a API estiver no ar.
+
+| # | Critério | Situação em 10/11/2026 | Evidência ou o que falta | Issue |
 |---|---|---|---|---|
 | 1 | Problema e público claros | Atende | Donos de site recebem feedback dos visitantes, com captura de tela, por um widget pequeno | — |
-| 2 | Hipótese a validar | Parcial | Meta proposta, sem decisão do responsável | #15 (responsável) |
-| 3 | Fluxo principal completo | Parcial | O envio pelo script único passa no CI, inclusive só com teclado (`web/e2e/teclado.spec.ts`); a API não está publicada | #3 (responsável) |
+| 2 | Hipótese a validar | Atende | Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável: a hipótese acima | #15 |
+| 3 | Fluxo principal completo | Parcial | Playwright do script único percorre o envio, inclusive só com teclado: `npx playwright test` em `web`, 10/11/2026, 10 de 10 (também no CI, job `web`). Falta o site: a API não está publicada (`curl https://feedback-widget-api.onrender.com/health`, 10/11/2026: 404) e a demo é um build antigo | #3, #11 (responsável); validação com pessoa de fora: #25 |
 | 4 | Escopo enxuto | Atende | Widget e API, sem painel (seção "Fora do MVP" no Histórico) | — |
-| 5 | Medição de uso | Não atende | Nada coleta uso | #15 (responsável) |
-| 6 | Falhas tratadas | Atende | O widget mostra erro de envio e aviso sem API, com testes em `web/src/__tests__` (`npx vitest run`: 11 de 11 em 09/11/2026) | — |
-| 7 | Desempenho aceitável | Parcial | Lighthouse 12.8.2 móvel local (`vite preview` do build), 09/11/2026: LCP 1,69 / 1,65 / 1,58 / 1,61 s (mediana 1,63 s), TBT 4 a 8 ms, elemento `main > p.mt-2`. No site, só depois que a Vercel voltar a publicar | #11 (responsável), #13 |
-| 8 | Acessibilidade básica | Atende | Formulário é um diálogo com nome do passo e foco inicial no primeiro tipo; Esc só fecha com o foco no widget (ou sem foco); Tab circula dentro dele (#18, #14). `npx playwright test` em 09/11/2026: 10 de 10. Lighthouse local: acessibilidade 100 nas 4 execuções | #13 (site) |
-| 9 | Segurança e conformidade | Atende | zod, escape no e-mail, CORS por lista e limite de envios, com testes da API | — |
-| 10 | Entrega confiável | Parcial | `gh api repos/douglasabnovato/feedback-widget/rulesets`, em 10/11/2026: ruleset `principal-protegida` ativo (exige PR, bloqueia force push e exclusão); o workflow `CI` roda nos PRs para `main` e `developer/**`. Falta: o status da Vercel segue vermelho desde 28/09 por configuração, e a publicação não depende do CI | #11 (responsável); #12 (proteção, feita) |
-| 11 | Testes dos fluxos críticos | Atende | CI do GitHub: 10 testes da API, 11 do web e 10 Playwright do script único | — |
+| 5 | Medição de uso | Parcial | Código pronto; falta a conta (decisão D5). GoatCounter sem cookie (`web/src/lib/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-feedback`; `npx vitest run`, 10/11/2026: 15 de 15, incluindo `medicao.test.ts` (não carrega nos testes nem em localhost) | #15 (responsável) |
+| 6 | Falhas tratadas | Atende | O widget mostra erro de envio e aviso sem API, com testes em `web/src/__tests__` (`npx vitest run`: 15 de 15 em 10/11/2026) | — |
+| 7 | Desempenho aceitável | Parcial | Lighthouse 12.8.2 móvel local (`vite preview` do build), 09/11/2026: LCP 1,69 / 1,65 / 1,58 / 1,61 s (mediana 1,63 s), TBT 4 a 8 ms, elemento `main > p.mt-2`. No site, só depois que a Vercel voltar a publicar (D6) | #11 (responsável), #13 |
+| 8 | Acessibilidade básica | Atende | Formulário é um diálogo com nome do passo e foco inicial no primeiro tipo; Esc só fecha com o foco no widget (ou sem foco); Tab circula dentro dele (#18, #14). `npx playwright test` em 10/11/2026: 10 de 10. Lighthouse local: acessibilidade 100 nas 4 execuções | #13 (site) |
+| 9 | Segurança e conformidade | Atende | zod, escape no e-mail, CORS por lista e limite de envios, com testes da API. `npm audit --omit=dev`, 10/11/2026: 0 vulnerabilidades em `web` e em `server`. Medição sem cookie e sem dado pessoal | — |
+| 10 | Entrega confiável | Atende | `gh api repos/douglasabnovato/feedback-widget/rules/branches/main`, 10/11/2026: regras `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` (`server` e `web`). A Vercel só recebe na `main` o que passou no CI | #12 (proteção, feita) |
+| 11 | Testes dos fluxos críticos | Atende | CI do GitHub: 10 testes da API, 15 do web e 10 Playwright do script único | — |
 | 12 | Documentação honesta | Atende | README e este arquivo dizem que a demo publicada é antiga e que a API não está no ar | — |
 
-**Atendidos:** 1, 4, 6, 8, 9, 11 e 12. **Parciais:** 2, 3, 7 e 10. **Não atendidos:** 5.
+**Atendidos:** 1, 2, 4, 6, 8, 9, 10, 11 e 12. **Parciais:** 3, 5 e 7.
 
-**Por que "Finalizado: sim":** tudo o que o código resolve está feito. A `main` está protegida desde 10/11/2026 (#12). Os critérios 2, 3, 5, 7 e 10 dependem do responsável (#15, #3, #11), com o rótulo `depende-do-responsavel`. A medição no site (#13) vem depois da #11.
+**Por que "Finalizado: sim":** tudo o que o código resolve está feito. Os critérios 3, 5 e 7 dependem do responsável (#3, #11, #15), com o rótulo `depende-do-responsavel`. A medição no site (#13) vem depois da #11.
 
-**CI:** vale o do GitHub. O status da Vercel nos PRs está vermelho desde 28/09 por configuração do projeto na Vercel (#11), não pelo código.
+**Vercel (diagnóstico de 10/11/2026, pela API do GitHub):** há dois projetos. O `nlw-8-impulse` (2022) serve a demo e não recebe deploy desde 16/05/2022. O `feedback-widget-lfke`, ligado em 28/09/2026, falhou em todos os deploys, sempre de 2 a 4 s depois de começar, antes da instalação. Um `vercel.json` com o build em `web/` não mudou nada (PR #24). A causa está na configuração do projeto; o passo a passo está na #11.
 
 ## Histórico
 
 Tabelas e revisões anteriores, mantidas como registro. O estado vale só na tabela do topo.
+
+### Estado de 10/11/2026, antes do ciclo da faixa de 90%
+
+**Resumo:** 7 de 12 aplicáveis atendidos (1, 4, 6, 8, 9, 11 e 12). **Finalizado:** sim. Diferenças para a tabela atual: o 2 estava "Parcial" (meta sem decisão), o 5 "Não atende" (nada coletava uso) e o 10 "Parcial" (a principal não exigia os jobs do CI).
 
 ### Estado de 09/11/2026 (ciclo de 07/11/2026)
 
