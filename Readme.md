@@ -15,12 +15,12 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 **O que foi feito neste ciclo**
 - O formulário abre como diálogo com o nome do passo, e o foco vai para dentro dele em cada passo; o Esc só fecha com o foco no widget (#18).
 - Medição local da demo: LCP mediano de 1,63 s e acessibilidade 100 no Lighthouse móvel.
+- 10/11/2026: a `main` está protegida pelo ruleset `principal-protegida` (exige PR, bloqueia force push e exclusão) (#12). Critério 10 segue "Parcial" pela Vercel (#11). Critérios: 7 de 12 atendidos.
 - Antes (ciclo de 07/11): Tab e Shift+Tab presos ao widget aberto, inclusive no script único com Shadow DOM (#14).
 
 **O que queremos fazer**
 - #3 Publicar a API e o banco no Render e no Neon (responsável).
 - #11 Corrigir o deploy da Vercel (responsável).
-- #12 Proteger a `main` com PR e CI obrigatórios (responsável).
 - #13 Medir LCP e acessibilidade da demo publicada, depois da #11.
 - #15 Confirmar a meta e ligar a medição de uso (responsável).
 

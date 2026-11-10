@@ -1,6 +1,6 @@
 # MVP — Feedback Widget
 
-**Nível:** Vitrine (N2), 12 critérios. Estado em 09/11/2026 (ciclo de 09/11/2026).
+**Nível:** Vitrine (N2), 12 critérios. Estado em 10/11/2026 (ciclo de 09/11/2026; critério 10 revisto em 10/11/2026).
 
 **Resumo:** 7 de 12 aplicáveis atendidos
 
@@ -17,13 +17,13 @@
 | 7 | Desempenho aceitável | Parcial | Lighthouse 12.8.2 móvel local (`vite preview` do build), 09/11/2026: LCP 1,69 / 1,65 / 1,58 / 1,61 s (mediana 1,63 s), TBT 4 a 8 ms, elemento `main > p.mt-2`. No site, só depois que a Vercel voltar a publicar | #11 (responsável), #13 |
 | 8 | Acessibilidade básica | Atende | Formulário é um diálogo com nome do passo e foco inicial no primeiro tipo; Esc só fecha com o foco no widget (ou sem foco); Tab circula dentro dele (#18, #14). `npx playwright test` em 09/11/2026: 10 de 10. Lighthouse local: acessibilidade 100 nas 4 execuções | #13 (site) |
 | 9 | Segurança e conformidade | Atende | zod, escape no e-mail, CORS por lista e limite de envios, com testes da API | — |
-| 10 | Entrega confiável | Não atende | Status da Vercel vermelho desde 28/09 por configuração; `main` sem proteção | #11, #12 (responsável) |
+| 10 | Entrega confiável | Parcial | `gh api repos/douglasabnovato/feedback-widget/rulesets`, em 10/11/2026: ruleset `principal-protegida` ativo (exige PR, bloqueia force push e exclusão); o workflow `CI` roda nos PRs para `main` e `developer/**`. Falta: o status da Vercel segue vermelho desde 28/09 por configuração, e a publicação não depende do CI | #11 (responsável); #12 (proteção, feita) |
 | 11 | Testes dos fluxos críticos | Atende | CI do GitHub: 10 testes da API, 11 do web e 10 Playwright do script único | — |
 | 12 | Documentação honesta | Atende | README e este arquivo dizem que a demo publicada é antiga e que a API não está no ar | — |
 
-**Atendidos:** 1, 4, 6, 8, 9, 11 e 12. **Parciais:** 2, 3 e 7. **Não atendidos:** 5 e 10.
+**Atendidos:** 1, 4, 6, 8, 9, 11 e 12. **Parciais:** 2, 3, 7 e 10. **Não atendidos:** 5.
 
-**Por que "Finalizado: sim":** tudo o que o código resolve está feito. Os critérios 2, 3, 5, 7 e 10 dependem do responsável (#15, #3, #11, #12), com o rótulo `depende-do-responsavel`. A medição no site (#13) vem depois da #11.
+**Por que "Finalizado: sim":** tudo o que o código resolve está feito. A `main` está protegida desde 10/11/2026 (#12). Os critérios 2, 3, 5, 7 e 10 dependem do responsável (#15, #3, #11), com o rótulo `depende-do-responsavel`. A medição no site (#13) vem depois da #11.
 
 **CI:** vale o do GitHub. O status da Vercel nos PRs está vermelho desde 28/09 por configuração do projeto na Vercel (#11), não pelo código.
 
