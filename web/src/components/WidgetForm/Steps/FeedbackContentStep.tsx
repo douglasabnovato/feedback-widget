@@ -7,14 +7,16 @@ import { CloseButton } from "../../CloseButton";
 import { ScreenshotButton } from "../ScreenshotButton";
 import { api, errorMessage } from "../../../lib/api";
 import { Loading } from "../../Loading";
+import { registrarEvento } from "../../../lib/medicao";
 
 interface FeedbackContentStepProps {
+    titleId: string;
     feedbackType: FeedbackType;
     onFeedbackRestartRequested: () => void;
     onFeedbackSent: () => void;
 }
 
-export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested, onFeedbackSent }: FeedbackContentStepProps) {
+export function FeedbackContentStep({ titleId, feedbackType, onFeedbackRestartRequested, onFeedbackSent }: FeedbackContentStepProps) {
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [comment, setComment] = useState("");
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
@@ -29,6 +31,7 @@ export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested, 
         setIsSendingFeedback(true);
         try {
             await api.post("/feedbacks", { type: feedbackType, comment, screenshot });
+            registrarEvento("enviar-feedback");
             onFeedbackSent();
         } catch (err) {
             setError(errorMessage(err));
@@ -43,7 +46,7 @@ export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested, 
                 <button type="button" aria-label="Voltar para os tipos de feedback" className="top-5 left-5 absolute text-zinc-300 hover:text-zinc-100" onClick={onFeedbackRestartRequested}>
                     <ArrowLeft weight="bold" className="w-4 h-4" aria-hidden="true" />
                 </button>
-                <h2 className="text-xl leading-6 flex items-center gap-2">
+                <h2 id={titleId} className="text-xl leading-6 flex items-center gap-2">
                     <img className="h-6 w-6" src={feedbackTypeInfo.image.source} alt="" />
                     {feedbackTypeInfo.title}
                 </h2>
@@ -53,6 +56,8 @@ export function FeedbackContentStep({ feedbackType, onFeedbackRestartRequested, 
                 <label htmlFor="feedback-comment" className="sr-only">Descreva seu feedback</label>
                 <textarea
                     id="feedback-comment"
+                    /* O botão do tipo escolhido some; o foco segue para o comentário */
+                    autoFocus
                     maxLength={1000}
                     className="min-w-[304px] w-full min-h-[112px] text-sm placeholder-zinc-400 text-zinc-100 border-zinc-600 bg-transparent rounded-md focus:border-brand-500 focus:ring-brand-500 focus:ring-1 focus:outline-none resize-none scrollbar scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin"
                     placeholder="Conte com detalhes o que está acontecendo..."
