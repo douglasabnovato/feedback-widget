@@ -43,6 +43,8 @@ describe("Contador de caracteres", () => {
     const anuncio = document.querySelector("[aria-live='polite']") as HTMLElement;
     expect(anuncio.textContent).toBe("");
     await vi.waitFor(() => expect(anuncio.textContent).toBe("Restam 995 caracteres"), { timeout: 2000 });
+    await userEvent.clear(campo);
+    expect(anuncio.textContent).toBe("");
   });
 });
 
@@ -59,6 +61,18 @@ describe("Falha da captura de tela", () => {
     expect(screen.getByRole("button", { name: "Capturar tela" })).toBeTruthy();
     await userEvent.click(screen.getByRole("button", { name: "Enviar feedback" }));
     expect(api.post).toHaveBeenCalledWith("/feedbacks", { type: "IDEA", comment: "Sem captura", screenshot: null });
+  });
+
+  it("uma captura boa tira o aviso da captura, mas não o erro de envio da API", async () => {
+    html2canvas.mockResolvedValue({ toDataURL: () => "data:image/png;base64,AAAA" });
+    (api.post as ReturnType<typeof vi.fn>).mockRejectedValue({ response: { data: { error: "Muitos envios. Tente de novo em 1 minuto." } } });
+    await abrirEscolherIdeia();
+    await userEvent.type(screen.getByLabelText("Descreva seu feedback"), "Texto");
+    await userEvent.click(screen.getByRole("button", { name: "Enviar feedback" }));
+    expect((await screen.findByRole("alert")).textContent).toMatch(/Muitos envios/);
+    await userEvent.click(screen.getByRole("button", { name: "Capturar tela" }));
+    expect(await screen.findByRole("button", { name: "Remover captura de tela" })).toBeTruthy();
+    expect(screen.getByRole("alert").textContent).toMatch(/Muitos envios/);
   });
 
   it("tira o aviso quando a captura seguinte dá certo", async () => {

@@ -5,6 +5,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { URL_API } from "../playwright.fluxo.config";
 
 const REGRAS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
+// A API aceita 5 envios por minuto por IP: este arquivo faz 2 POSTs reais (o 3º teste derruba a rede).
+// Teste novo com envio real ou retries podem esbarrar no 429.
 
 /* Violações do axe na página toda, no estado atual */
 async function violacoes(page: Page) {
@@ -36,7 +38,10 @@ test("envia um feedback com captura de tela pela demo e a API grava", async ({ p
   await page.getByRole("button", { name: "Capturar tela" }).click();
   await expect(page.getByRole("button", { name: "Remover captura de tela" })).toBeVisible({ timeout: 20_000 });
   // Com o mouse sobre o envio: o hover antigo (brand-300) tinha contraste de 3,5:1.
-  await page.getByRole("button", { name: "Enviar feedback" }).hover();
+  // Com reducedMotion "reduce", o botão não tem transição (motion-reduce:transition-none): o axe lê a cor final.
+  const enviar = page.getByRole("button", { name: "Enviar feedback" });
+  await enviar.hover();
+  await expect(enviar).toHaveCSS("background-color", "rgb(111, 71, 209)");
   expect(await violacoes(page)).toEqual([]);
 
   const resposta = page.waitForResponse((r) => r.url() === `${URL_API}/feedbacks` && r.request().method() === "POST");

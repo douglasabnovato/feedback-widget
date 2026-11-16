@@ -31,11 +31,16 @@ export function FeedbackContentStep({ titleId, feedbackType, onFeedbackRestartRe
     const [comment, setComment] = useState("");
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
     const [error, setError] = useState("");
+    /* Erro da captura separado do erro de envio: uma captura boa não apaga o aviso da API */
+    const [erroCaptura, setErroCaptura] = useState("");
     /* O leitor de tela ouve a contagem quando a pessoa para de digitar, não a cada tecla */
     const [anuncio, setAnuncio] = useState("");
 
     useEffect(() => {
-        if (comment.length === 0) return;
+        if (comment.length === 0) {
+            setAnuncio("");
+            return;
+        }
         const espera = setTimeout(() => setAnuncio(textoRestante(comment.length)), 700);
         return () => clearTimeout(espera);
     }, [comment]);
@@ -87,20 +92,21 @@ export function FeedbackContentStep({ titleId, feedbackType, onFeedbackRestartRe
                     {textoRestante(comment.length)}
                 </p>
                 <p className="sr-only" aria-live="polite">{anuncio}</p>
+                {erroCaptura && <p role="alert" className="text-sm text-red-300 mt-2">{erroCaptura}</p>}
                 {error && <p role="alert" className="text-sm text-red-300 mt-2">{error}</p>}
                 <footer className="flex gap-2 mt-2">
                     <ScreenshotButton
                         screenshot={screenshot}
                         onScreenshotTook={(imagem) => {
                             setScreenshot(imagem);
-                            if (imagem) setError("");
+                            if (imagem) setErroCaptura("");
                         }}
-                        onScreenshotFailed={() => setError(ERRO_CAPTURA)}
+                        onScreenshotFailed={() => setErroCaptura(ERRO_CAPTURA)}
                     />
                     <button
                         disabled={comment.trim().length === 0 || isSendingFeedback}
                         type="submit"
-                        className="p-2 bg-brand-500 rounded-md border-transparent flex-1 flex justify-center items-center text-sm hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:hover:bg-brand-500"
+                        className="p-2 bg-brand-500 rounded-md border-transparent flex-1 flex justify-center items-center text-sm hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors motion-reduce:transition-none disabled:opacity-50 disabled:hover:bg-brand-500"
                     >
                         {isSendingFeedback ? <Loading label="Enviando feedback" /> : "Enviar feedback"}
                     </button>
