@@ -7,6 +7,7 @@
     "build": "tsc && vite build",
     "build:widget": "tsc && vite build --config vite.widget.config.ts",
     "test:widget": "playwright test",
+    "test:e2e": "playwright test --config playwright.fluxo.config.ts",
     "preview": "vite preview",
     "test": "vitest run"
   },
@@ -18,6 +19,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "1.65.0",
     "@tailwindcss/forms": "^0.5.10",
     "@testing-library/react": "^16.3.0",
