@@ -13,6 +13,36 @@ Timebox: 60 min.
 | Should | Acessibilidade e pt-BR (D7) | Médio | Baixo | ✅ axe 0 |
 | Could | Painel de leitura dos feedbacks | Alto | Médio | Próximo ciclo |
 
+## Ciclo de 16/11/2026
+
+> Executado em 16/11/2026. O PR #21 (sprint de 12/11) entrou na `main` em 16/11. Este ciclo usa `feature/2026-11-16`, criada da `developer/sprint-2026-11-19`, que nasceu da `main`. Nível: Vitrine (N2), 12 critérios. A `main` fica com o responsável.
+
+### Produto
+- **Problema e público:** donos de site recebem feedback com captura de tela por um widget pequeno. O visitante precisa concluir o envio sem ajuda, com mouse ou teclado.
+- **Hipótese e meta:** a mesma do `MVP.md` (quem vê o widget envia um feedback em menos de 1 minuto). Este ciclo não muda a meta; prova o fluxo de ponta a ponta no navegador contra a API real.
+- **O que a pesquisa trouxe:**
+  - O `@axe-core/playwright` roda o axe na página no estado atual; estados abertos por interação (o diálogo) precisam ser preparados antes do `analyze()`, e o axe pega só parte dos problemas ([Playwright, testes de acessibilidade](https://playwright.dev/docs/accessibility-testing)).
+  - Contador de caracteres: mostrar abaixo do campo quanto falta para o limite e anunciar a contagem ao leitor de tela quando a pessoa para de digitar, e não a cada tecla ([GOV.UK Design System, character count](https://design-system.service.gov.uk/components/character-count/)). A API já limita o comentário a 1000 caracteres.
+  - Deploy da Vercel sem log de build: a Vercel recusa o deploy antes do build quando falta uma pré-condição, como `vercel.json` inválido, Ignored Build Step, commit de quem não é do time ou integração que não provisionou ([Vercel, Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)).
+- **Backlog (impacto × esforço):**
+  1. Critério 9 honesto: com os alertas do Dependabot desligados (API 403), fica "Parcial" (engenharia#33) e vira issue (alto × baixo). Este ciclo.
+  2. Playwright do fluxo da demo contra a API real (POST pelo navegador, CORS de verdade) com axe na página e no diálogo aberto (alto × médio). Este ciclo.
+  3. Falha da captura de tela tratada: hoje um erro do `html2canvas` some sem aviso (médio × baixo). Este ciclo.
+  4. Contador de caracteres do comentário, vindo da pesquisa (médio × baixo). Este ciclo.
+  5. Tirar `server/coverage` do Git, que o `.gitignore` já ignora (baixo × baixo). Este ciclo.
+  6. Vercel (#11), API (#3), GoatCounter (#15) e medição no site (#13). Responsável.
+- **Fora do escopo:** configuração da Vercel e do Render; painel de leitura; tema escuro.
+
+### Engenharia
+- **Arquitetura:** API Express 5 com repositório injetado (Prisma ou memória) e e-mail injetado (SMTP ou console). Demo React 18 + Vite e script único em Shadow DOM. O teste novo sobe a API com repositório em memória (`tsx src/server.ts`) e a demo com `vite preview`, cada uma numa porta própria.
+- **Riscos:** o `html2canvas` no Chromium do CI pode ser lento; o limite de 5 envios por minuto da API vale também nos testes (o arquivo envia no máximo 3).
+- **Qualidade:** axe com regras WCAG 2 A e AA, só no tema claro (o app não tem tema escuro próprio: nenhum `prefers-color-scheme` no CSS). Teclado já coberto pelo `teclado.spec.ts`.
+- **Definição de pronto:** job `e2e` verde no CI, revisão independente feita, PR para a sprint, `MVP.md` com evidência de cada "Atende".
+
+### Plano de ação
+- **Executa:** itens 1 a 5 do backlog; diagnóstico da Vercel na #11; `MVP.md`, README e `DEPLOY.md`.
+- **Vira issue:** ligar os alertas do Dependabot (responsável); os demais seguem nas issues abertas.
+
 ## Ciclo de 09/11/2026
 
 > Executado em 09/11/2026. Branch `feature/2026-11-09`, criada a partir da `developer/sprint-2026-11-12`, com PR para a sprint. A `main` fica com o responsável (PR #21). Nível: Vitrine (N2). Escopo: só o que o código resolve (#18 e a medição local). O status da Vercel está vermelho por configuração (#11); vale o CI do GitHub.
