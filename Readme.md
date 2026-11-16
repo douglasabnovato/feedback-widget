@@ -8,38 +8,49 @@
 
 Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
-## Estado e próximos passos (ciclo de 10/11/2026)
+## Estado e próximos passos (ciclo de 16/11/2026)
 
-**No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 10/11/2026, mas é um build de 2022, de outro projeto da Vercel. O projeto novo (`feedback-widget-lfke`) falha em todo deploy por configuração (#11). A API não está publicada (#3), então o envio pela demo falha.
+**No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 16/11/2026, mas é um build de 2022, de outro projeto da Vercel. O projeto novo (`feedback-widget-lfke`) falha em todo deploy antes do build, por configuração (#11). A API não está publicada (`/health` deu 404 em 16/11/2026, #3), então o envio pela demo falha. Critérios do MVP: 8 de 12 atendidos; os 4 parciais dependem de conta ou painel.
 
-**O que foi feito neste ciclo** (PR #24)
-- Medição de uso sem cookie (GoatCounter, código `douglasabnovato`): só no build de produção fora de localhost, com o evento `enviar-feedback`. Falta a conta (#15).
-- Meta da hipótese decidida no ciclo (D1) e `main` exigindo os jobs `server` e `web` do CI (D3). Critérios: 9 de 12 atendidos.
-- Diagnóstico da Vercel na #11: a falha vem antes da instalação, então o conserto é no painel.
-- Antes (ciclo de 09/11): o formulário abre como diálogo, com foco dentro dele e Esc só no widget (#18); LCP local mediano de 1,63 s.
+**O que foi feito neste ciclo** (PR #30)
+- Teste de ponta a ponta da demo com a API real (job `e2e` no CI): envio com captura de tela, POST pelo navegador e axe na página, no diálogo e na confirmação.
+- O axe achou contraste baixo no hover de "Enviar feedback" (3,5:1); agora é 6:1.
+- Contador de caracteres do comentário (limite de 1000, o mesmo da API), anunciado ao leitor de tela depois de uma pausa.
+- Falha da captura de tela vira aviso, e o envio segue sem ela.
+- Dependências de produção em dia no patch e no minor (express, nodemailer, axios); `npm audit --omit=dev` com 0 vulnerabilidades.
+- Critério 9 revisto: fica "Parcial" enquanto os alertas do Dependabot estiverem desligados (#26).
+- Diagnóstico da Vercel e passo a passo em [`docs/DEPLOY.md`](docs/DEPLOY.md).
+- Ciclos anteriores: diálogo acessível e teclado (PR #22), medição sem cookie e `main` protegida (PR #23 e #24).
 
 **O que queremos fazer**
-- #3 Publicar a API e o banco no Render e no Neon (responsável; Blueprint pronto).
+- #3 Publicar a API e a demo no Render, com banco no Neon (responsável; Blueprint pronto).
 - #11 Corrigir o deploy da Vercel (responsável; passo a passo na issue).
 - #15 Criar a conta do GoatCounter (responsável).
+- #26 Ligar os alertas do Dependabot (responsável).
+- #27 Exigir o job `e2e` na proteção da `main` (responsável).
 - #13 Medir LCP e acessibilidade da demo publicada, depois da #11.
 - #25 Validar com uma pessoa de fora.
+- #28 Atualizar as dependências de versão maior.
+- #29 Testar captura e contador no script único.
 
 **Onde está a documentação**
 - Estado dos critérios: [`docs/MVP.md`](docs/MVP.md)
 - Plano do ciclo: [`docs/PLANO-DE-ACAO.md`](docs/PLANO-DE-ACAO.md)
+- Publicação: [`docs/DEPLOY.md`](docs/DEPLOY.md)
 
 ### ✅ Estado atual (v2)
 
-- Widget em português, acessível (axe 0 violações), com mensagens de erro e captura só da área visível.
+- Widget em português, acessível (axe sem violações no teste `e2e`), com mensagens de erro, contador de caracteres e captura só da área visível.
 - API Express 5 + TypeScript: validação com zod, escape do HTML do e-mail, CORS por lista, limite de 5 envios/min e de 4 MB por captura.
 - Credenciais SMTP e banco via `.env` (veja `server/.env.example`); sem SMTP a API registra no console, sem banco usa memória.
-- 35 testes (10 Jest na API, 15 Vitest no web e 10 Playwright do script único).
+- 42 testes (10 Jest na API, 19 Vitest no web, 10 Playwright do script único e 3 Playwright do fluxo da demo com a API real).
 
 ```sh
 cd server && cp .env.example .env && npm install && npx prisma generate && npm run dev   # :3333
 cd web && cp .env.example .env && npm install && npm run dev                           # :5173
 ```
+
+Testes: `cd server && npm test`; `cd web && npm test`; `npm run build:widget && npm run test:widget` (script único); `npm run test:e2e` (sobe a API e a demo sozinho, nas portas 3391 e 4391). Os dois últimos pedem `npx playwright install chromium` uma vez.
 
 ### 🧩 Instalar o widget em outro site
 
@@ -53,7 +64,7 @@ O widget roda em um Shadow DOM, sem alterar os estilos da página. O domínio do
 
 ### 🌐 Em produção
 
-- Site: https://nlw-8-impulse-nu.vercel.app/ (build antigo; o deploy da Vercel falha desde 28/09, #11)
+- Site: https://nlw-8-impulse-nu.vercel.app/ (build de 2022; o deploy da Vercel falha desde 28/09, #11)
 - API e widget no Render: ainda não publicados; o `render.yaml` está pronto.
 - Hospedagem gratuita: Render (API + site estático no mesmo `render.yaml`) com PostgreSQL no Neon, publicada a cada push na `main`.
 - Passo a passo completo (Mailtrap, Neon, Render, CI e conferência): [docs/DEPLOY.md](docs/DEPLOY.md).
@@ -168,7 +179,6 @@ Feito com ❤️ por Douglas A B Novato 👋🏽 [Entre em contato!](https://www
 
 ## Próximos passos do responsável
 
-- Ver o log da Vercel e conferir o Root Directory, que pode precisar ser `web`.
-- Publicar a API e o widget com o `render.yaml`.
-
-Acompanhamento nas issues #3, #11, #12 e #15.
+- Ler a mensagem de erro do deploy na Vercel e conferir o Root Directory (`web`), passo a passo na #11.
+- Publicar a API e a demo com o `render.yaml` (#3).
+- Criar a conta do GoatCounter (#15), ligar os alertas do Dependabot (#26) e exigir o job `e2e` na `main` (#27).
