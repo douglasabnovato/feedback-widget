@@ -43,7 +43,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 - Widget em português, acessível (axe sem violações no teste `e2e`), com mensagens de erro, contador de caracteres e captura só da área visível.
 - API Express 5 + TypeScript: validação com zod, escape do HTML do e-mail, CORS por lista, limite de 5 envios/min e de 4 MB por captura.
 - Credenciais SMTP e banco via `.env` (veja `server/.env.example`); sem SMTP a API registra no console, sem banco usa memória.
-- 42 testes (10 Jest na API, 19 Vitest no web, 10 Playwright do script único e 3 Playwright do fluxo da demo com a API real).
+- 43 testes (10 Jest na API, 20 Vitest no web, 10 Playwright do script único e 3 Playwright do fluxo da demo com a API real).
 
 ```sh
 cd server && cp .env.example .env && npm install && npx prisma generate && npm run dev   # :3333
