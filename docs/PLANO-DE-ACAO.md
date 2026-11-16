@@ -41,7 +41,7 @@ Timebox: 60 min.
 
 ### Plano de ação
 - **Executa:** itens 1 a 5 do backlog; diagnóstico da Vercel na #11; `MVP.md`, README e `DEPLOY.md`.
-- **Vira issue:** ligar os alertas do Dependabot (responsável); os demais seguem nas issues abertas.
+- **Vira issue:** ligar os alertas do Dependabot (#26, responsável); exigir o job `e2e` na `main` (#27, responsável); dependências de versão maior (#28); captura e contador no script único (#29). Seguem abertas #3, #11, #13, #15 e #25.
 
 ## Ciclo de 09/11/2026
 

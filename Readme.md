@@ -50,7 +50,7 @@ cd server && cp .env.example .env && npm install && npx prisma generate && npm r
 cd web && cp .env.example .env && npm install && npm run dev                           # :5173
 ```
 
-Testes: `cd server && npm test`; `cd web && npm test`; `npm run build:widget && npm run test:widget` (script único); `npm run test:e2e` (sobe a API e a demo sozinho, nas portas 3391 e 4391). Os dois últimos pedem `npx playwright install chromium` uma vez.
+Testes: `cd server && npm test`; `cd web && npm test`; `npm run build:widget && npm run test:widget` (script único); `npm run test:e2e` (sobe a API e a demo sozinho, nas portas 3391 e 4391). Os dois últimos pedem `npx playwright install chromium` uma vez; o `test:e2e` também pede `npm ci && npx prisma generate` em `server`, porque sobe a API com `tsx`.
 
 ### 🧩 Instalar o widget em outro site
 
