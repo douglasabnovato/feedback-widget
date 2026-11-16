@@ -2,6 +2,39 @@
 
 Plano de ação para publicar a API e o widget em hospedagem gratuita.
 
+## Estado em 16/11/2026
+
+| Peça | Endereço | `curl` em 16/11/2026 | Situação | Issue |
+|---|---|---|---|---|
+| Demo antiga (Vercel, projeto `nlw-8-impulse`) | https://nlw-8-impulse-nu.vercel.app/ | 200 | Build de 2022; não recebe deploy desde 16/05/2022 | #11 |
+| Projeto novo da Vercel (`feedback-widget-lfke`) | status "Vercel" nos commits | — | Todo deploy falha antes do build (diagnóstico abaixo) | #11 |
+| API no Render (`feedback-widget-api`) | https://feedback-widget-api.onrender.com/health | 404 | Blueprint pronto (`render.yaml`); serviço não criado | #3 |
+| Demo no Render (`feedback-widget-web`) | https://feedback-widget-web.onrender.com | — | Mesmo Blueprint | #3 |
+| Medição (GoatCounter) | https://douglasabnovato.goatcounter.com | — | Código pronto; conta não criada | #15 |
+
+Tudo o que falta é conta e painel, do responsável. O código e os testes não dependem disso.
+
+### Vercel: por que o deploy falha (diagnóstico de 16/11/2026)
+
+O que se vê sem entrar na conta:
+- O status "Vercel" do merge do PR #21 (`f8c0201`, 16/11/2026) diz "Deployment has failed" e manda rodar `npx vercel inspect dpl_ESuGBhhwKfZEas9nhqsJyu4A6Jh5 --logs`. Ficou 19 s em "pending" e foi para "failure".
+- A página pública do deploy (`feedback-widget-lfke-bqy1shr8g-douglasabnovatos-projects.vercel.app`) mostra só "Deployment has failed" com estado `ERROR`, sem log de build.
+- Nos deploys de 10/11/2026 a falha veio de 2 a 4 s depois do início. Um `vercel.json` com o build em `web/` não mudou nada (PR #24).
+- O merge do PR #21 foi feito pelo próprio dono do repositório no GitHub. Então a causa "commit de quem não é do time" fica menos provável para esse deploy.
+
+Pela documentação da Vercel, um deploy falha **sem log de build** quando falta uma pré-condição: `vercel.json` inválido, Ignored Build Step, commit de quem não é membro do time ou integração do Marketplace que não provisionou ([Troubleshooting Build Errors](https://vercel.com/docs/deployments/troubleshoot-a-build)). O repositório não tem `vercel.json`. Sobram três suspeitas, todas no painel: o Root Directory (o app está em `web/`), o Ignored Build Step e uma integração ligada ao projeto. A mensagem exata só aparece com login, no painel ou no `vercel inspect`.
+
+Passo a passo para o responsável (também na #11):
+1. Abrir https://vercel.com/douglasabnovatos-projects/feedback-widget-lfke → **Deployments** → o deploy mais recente da `main` (com erro). Ler a mensagem do quadro de erro e copiar para a #11 (sem segredos).
+2. **Settings → Build and Deployment**: **Root Directory** = `web`; **Framework Preset** = `Vite`; **Build Command** = `npm run build`; **Output Directory** = `dist`; **Node.js Version** = `22.x`. Salvar.
+3. **Settings → Git**: em **Ignored Build Step**, deixar **Automatic**. Conferir que o repositório ligado é `douglasabnovato/feedback-widget`.
+4. **Settings → Integrations** (ou a aba **Integrations** do time): se houver integração ligada ao projeto, ver se o estado é de erro.
+5. **Settings → Environment Variables**: `VITE_API_URL` = `https://feedback-widget-api.onrender.com` (depois da #3). Não é segredo.
+6. **Deployments → ⋯ → Redeploy**, sem cache. O status "Vercel" do commit deve ficar verde.
+7. Decidir o endereço: ou apontar `nlw-8-impulse-nu.vercel.app` para o projeto novo (**Settings → Domains**), ou trocar o link do README. Depois, arquivar o projeto que sobrar.
+
+Alternativa sem a Vercel: a demo também sai pelo Render, no mesmo Blueprint da API (Etapa 4). Nesse caso, desligar o projeto `feedback-widget-lfke` (**Settings → Git → Disconnect**) tira o status vermelho dos commits.
+
 ## 1. Desafio
 
 Colocar no ar, sem custo, um widget React que envia feedbacks com captura de tela para uma API Express + Prisma, que grava no PostgreSQL e avisa por e-mail (Mailtrap), sem repetir o vazamento de credenciais SMTP da versão original.
@@ -45,7 +78,7 @@ Conferido e mantido: o build da API roda `npm ci && npm run build && npm run mig
 
 ### Segurança e LGPD
 
-- O usuário e a senha antigos do Mailtrap (`6ce2083be599f7`) estão no histórico do Git: considere-os públicos e **troque-os antes de publicar**.
+- O usuário e a senha antigos do Mailtrap estão no histórico do Git: considere-os públicos e **troque-os antes de publicar** (Etapa 0).
 - As credenciais novas ficam só no `server/.env` (fora do Git) e no painel do Render.
 - A captura de tela pode mostrar dados pessoais de quem está na página. O widget captura só a área visível e o texto do e-mail é escapado. Numa demonstração, apague feedbacks de teste no SQL Editor do Neon.
 - CORS aceita só a origem do widget, com limite de 5 envios por minuto por IP e corpo limitado ao tamanho da captura.
@@ -62,33 +95,25 @@ Conferido e mantido: o build da API roda `npm ci && npm run build && npm run mig
 
 1. Entrar em **neon.com** com a conta do GitHub.
 2. Se ainda não existir, **New Project**: nome `portfolio-ser-mvp`, região **AWS US West 2 (Oregon)** (a mesma região padrão do Render). Os outros projetos do portfólio usam este mesmo projeto.
-3. **Branches → main → aba Databases → New database**: nome `feedback_widget`, dono `neondb_owner`.
-4. No **Project Dashboard**, botão **Connect**: Branch `main`, Database `feedback_widget`, Role `neondb_owner`, **Connection pooling desligado** (conexão direta: é a opção mais segura para o Prisma Migrate e sobra para o volume de uma demonstração) e copiar a string.
-5. Conferir o formato: `postgresql://neondb_owner:SENHA@ep-xxxx.us-west-2.aws.neon.tech/feedback_widget?sslmode=require`. Se vier `&channel_binding=require` no final, remova; o `?sslmode=require` tem que ficar.
+3. **Branches → main → aba Roles → New role**: nome `feedback_widget_app` (um usuário por aplicação, como manda a base de engenharia; senha gerada pelo Neon, só letras e números).
+4. **Branches → main → aba Databases → New database**: nome `feedback_widget`, dono `feedback_widget_app`. Assim a senha desta aplicação só abre este banco.
+5. No **Project Dashboard**, botão **Connect**: Branch `main`, Database `feedback_widget`, Role `feedback_widget_app`, **Connection pooling desligado** (conexão direta: é a opção mais segura para o Prisma Migrate e sobra para o volume de uma demonstração) e copiar a string.
+6. Conferir o formato: `postgresql://feedback_widget_app:SENHA@ep-xxxx.us-west-2.aws.neon.tech/feedback_widget?sslmode=require`. Se vier `&channel_binding=require` no final, remova; o `?sslmode=require` tem que ficar.
 
 ### Etapa 2 · Validar localmente (Git Bash)
 
-1. `cd /c/ambiente-projeto/ser-mvp/feedback-widget/server`
-2. `npm ci` (baixa os binários do Prisma)
-3. `npm run build` (roda `prisma generate` e compila; se falhar por causa do `deepmerge-ts`, remova o bloco `"overrides"` do `package.json` e rode `npm install`)
-4. `npm run typecheck && npm test` (10 testes)
-5. `cp .env.example .env` e preencher `DATABASE_URL` (Neon), `MAIL_USER`, `MAIL_PASS` e `MAIL_TO` (Etapa 0)
-6. `npm run migrate` (deve listar as 2 migrações aplicadas) e `npm run dev`
-7. Em outro terminal: `cd ../web && npm ci && npm test && npm run build` (3 testes)
+1. Na pasta do clone: `cd server && npm ci && npx prisma generate`
+2. `npm run typecheck && npm test` (10 testes Jest)
+3. `cp .env.example .env` e preencher `DATABASE_URL` (Neon), `MAIL_USER`, `MAIL_PASS` e `MAIL_TO` (Etapa 0). Sem `DATABASE_URL`, a API guarda em memória.
+4. `npm run migrate` (aplica as 2 migrações) e `npm run dev` (porta 3333)
+5. Em outro terminal: `cd ../web && npm ci && npm test && npm run build` (20 testes Vitest)
+6. `npm run build:widget && npx playwright install chromium && npm run test:widget` (10 testes do script único)
+7. `npm run test:e2e` (3 testes: a demo e a API sobem sozinhas nas portas 4391 e 3391, com POST real e axe)
 8. `cp .env.example .env && npm run dev`, abrir `http://localhost:5173`, enviar um feedback e ver o e-mail chegar no Mailtrap.
 
-### Etapa 3 · Subir para o GitHub (branch `main`)
+### Etapa 3 · CI e `main` protegida (feito)
 
-1. Voltar à raiz: `cd /c/ambiente-projeto/ser-mvp/feedback-widget`
-2. Remover os arquivos substituídos:
-   `git rm -r server/coverage server/prisma/dev.db server/jest.config.ts server/src/prisma.ts server/src/routes.ts server/src/use-cases/submit-feedback-se-case.spec.ts web/src/.env.local.example`
-3. Ativar o CI (a pasta `.github` é protegida para a ferramenta que preparou o projeto):
-   `mkdir -p .github/workflows && mv ci/github-actions-ci.yml .github/workflows/ci.yml && rmdir ci`
-4. `git status` (não podem aparecer `.env`, `dist/`, `coverage/` nem `node_modules/`)
-5. `git add -A`
-6. `git commit -m "feat(deploy): Blueprint do Render com URLs cruzadas, Node 22, guia de deploy com Neon"`
-7. `git push origin main`
-8. No GitHub, aba **Actions**: o CI precisa ficar verde (API e widget).
+O workflow `.github/workflows/ci.yml` roda os jobs `server`, `web` e `e2e` em todo push e PR para `main` e `developer/**`. A `main` tem o ruleset `principal-protegida`, que exige PR e os jobs `server` e `web` (#12). Falta incluir o `e2e` entre os obrigatórios (issue própria, do responsável).
 
 ### Etapa 4 · Criar os serviços no Render
 

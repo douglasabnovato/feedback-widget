@@ -1,37 +1,41 @@
 # MVP — Feedback Widget
 
-**Nível:** Vitrine (N2), 12 critérios. Estado em 10/11/2026 (ciclo da faixa de 90%, decisões D1 a D7 em `engenharia/decisoes/2026-11-10-ciclo-faixa-90.md`).
+**Nível:** Vitrine (N2), 12 critérios. Estado em 16/11/2026 (ciclo de 16/11/2026, PR feature → sprint #30).
 
-**Resumo:** 9 de 12 aplicáveis atendidos
+**Resumo:** 8 de 12 aplicáveis atendidos
 
-**Finalizado:** sim — faltam 3, 5 e 7, que dependem do responsável: publicar a API (#3), corrigir a Vercel (#11) e criar a conta do GoatCounter (#15); depois, medir no site (#13)
+**Finalizado:** sim — os 4 parciais (3, 5, 7 e 9) dependem do responsável e têm issue `depende-do-responsavel`: API no Render (#3), Vercel (#11), GoatCounter (#15) e alertas do Dependabot (#26); depois, medir no site (#13)
 
-**Hipótese (meta do ciclo, texto da proposta mantido):** quem vê o widget na demo envia um feedback em menos de 1 minuto. Saberemos pelo GoatCounter: visitas à demo e o evento `enviar-feedback`, depois que a API estiver no ar.
+**Hipótese:** acreditamos que quem vê o widget na demo envia um feedback sozinho em menos de 1 minuto (meta decidida no ciclo de 10/11/2026, D1, revisável pelo responsável na #15). **Saberemos quando** a pessoa de fora da #25 concluir o envio na demo publicada em menos de 1 minuto e o painel do GoatCounter (#15) mostrar, na primeira semana, visitas à demo e eventos `enviar-feedback`.
 
-| # | Critério | Situação em 10/11/2026 | Evidência ou o que falta | Issue |
+| # | Critério | Situação em 16/11/2026 | Evidência ou o que falta | Issue |
 |---|---|---|---|---|
 | 1 | Problema e público claros | Atende | Donos de site recebem feedback dos visitantes, com captura de tela, por um widget pequeno | — |
-| 2 | Hipótese a validar | Atende | Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável: a hipótese acima | #15 |
-| 3 | Fluxo principal completo | Parcial | Playwright do script único percorre o envio, inclusive só com teclado: `npx playwright test` em `web`, 10/11/2026, 10 de 10 (também no CI, job `web`). Falta o site: a API não está publicada (`curl https://feedback-widget-api.onrender.com/health`, 10/11/2026: 404) e a demo é um build antigo | #3, #11 (responsável); validação com pessoa de fora: #25 |
+| 2 | Hipótese a validar | Atende | Hipótese acima, com meta (menos de 1 minuto) e "saberemos quando" | #15, #25 |
+| 3 | Fluxo principal completo | Parcial | No navegador, contra a API real: `web/e2e-fluxo/fluxo.spec.ts` abre a demo, escolhe "Problema", escreve, tira a captura, envia (POST com CORS de verdade, resposta 201) e confere a gravação no `/health`. `npm run test:e2e`, 16/11/2026: 3 de 3; no CI, job `e2e` do run 43815752153 (commit `c01cc82`, 16/11/2026: 3 de 3). Falta o site: `curl https://feedback-widget-api.onrender.com/health`, 16/11/2026: 404 (API não publicada) e a demo da Vercel é um build de 2022 (decisão D2: o 3 vale com o fluxo no site) | #3, #11 (responsável); #25 |
 | 4 | Escopo enxuto | Atende | Widget e API, sem painel (seção "Fora do MVP" no Histórico) | — |
-| 5 | Medição de uso | Parcial | Código pronto; falta a conta (decisão D5). GoatCounter sem cookie (`web/src/lib/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-feedback`; `npx vitest run`, 10/11/2026: 15 de 15, incluindo `medicao.test.ts` (não carrega nos testes nem em localhost) | #15 (responsável) |
-| 6 | Falhas tratadas | Atende | O widget mostra erro de envio e aviso sem API, com testes em `web/src/__tests__` (`npx vitest run`: 15 de 15 em 10/11/2026) | — |
-| 7 | Desempenho aceitável | Parcial | Lighthouse 12.8.2 móvel local (`vite preview` do build), 09/11/2026: LCP 1,69 / 1,65 / 1,58 / 1,61 s (mediana 1,63 s), TBT 4 a 8 ms, elemento `main > p.mt-2`. No site, só depois que a Vercel voltar a publicar (D6) | #11 (responsável), #13 |
-| 8 | Acessibilidade básica | Atende | Formulário é um diálogo com nome do passo e foco inicial no primeiro tipo; Esc só fecha com o foco no widget (ou sem foco); Tab circula dentro dele (#18, #14). `npx playwright test` em 10/11/2026: 10 de 10. Lighthouse local: acessibilidade 100 nas 4 execuções | #13 (site) |
-| 9 | Segurança e conformidade | Atende | zod, escape no e-mail, CORS por lista e limite de envios, com testes da API. `npm audit --omit=dev`, 10/11/2026: 0 vulnerabilidades em `web` e em `server`. Medição sem cookie e sem dado pessoal | — |
-| 10 | Entrega confiável | Atende | `gh api repos/douglasabnovato/feedback-widget/rules/branches/main`, 10/11/2026: regras `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` (`server` e `web`). A Vercel só recebe na `main` o que passou no CI | #12 (proteção, feita) |
-| 11 | Testes dos fluxos críticos | Atende | CI do GitHub: 10 testes da API, 15 do web e 10 Playwright do script único | — |
-| 12 | Documentação honesta | Atende | README e este arquivo dizem que a demo publicada é antiga e que a API não está no ar | — |
+| 5 | Medição de uso | Parcial | Código pronto: GoatCounter sem cookie (`web/src/lib/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-feedback` (`medicao.test.ts`). Falta a conta, e o painel não mostra visitas | #15 (responsável) |
+| 6 | Falhas tratadas | Atende | `npx vitest run`, 16/11/2026: 20 de 20 (erro da API, comentário vazio, falha da captura de tela em `comentario.test.tsx`, sem apagar o erro de envio). No navegador, `fluxo.spec.ts`: erro de validação da API e falta de rede mostram aviso e mantêm o texto (3 de 3). Sem API publicada, a demo avisa (`app.test.tsx`) | — |
+| 7 | Desempenho aceitável | Parcial | Só medição local: Lighthouse 12.8.2 móvel (`vite preview`), 09/11/2026, LCP mediano 1,63 s, TBT 4 a 8 ms, elemento `main > p.mt-2`. No site publicado não há o que medir: a demo é o build de 2022 | #11 (responsável), #13 |
+| 8 | Acessibilidade básica | Atende | axe (`@axe-core/playwright`, WCAG 2 A e AA) dentro do `fluxo.spec.ts`, em largura de desktop (1280 px) e com a API real: página, diálogo aberto, hover do envio, confirmação e erro de rede, 0 violações (`npm run test:e2e`, 16/11/2026, e job `e2e` do run 43815752153, 16/11/2026). O teste achou contraste de 3,5:1 no hover de "Enviar feedback", corrigido para 6:1. Teclado: `web/e2e/teclado.spec.ts` (Tab, Shift+Tab, Esc, foco devolvido), `npm run test:widget`, 16/11/2026: 10 de 10. O app não tem tema escuro próprio (nenhum `prefers-color-scheme` no CSS), então o axe roda só no claro | #13 (site) |
+| 9 | Segurança e conformidade | Parcial | Alertas do Dependabot desligados: `gh api "repos/douglasabnovato/feedback-widget/dependabot/alerts?state=open&per_page=100"`, 16/11/2026: 403. Pela regra em decisão (engenharia#33), fica "Parcial" até ligar os alertas. `npm audit --omit=dev`, 16/11/2026: 0 vulnerabilidades em `server` e `web`. No código: zod, escape no e-mail, CORS por lista, limite de envios, nenhum segredo; medição sem cookie e sem dado pessoal | #26 (responsável), engenharia#33 |
+| 10 | Entrega confiável | Atende | `gh api repos/douglasabnovato/feedback-widget/rules/branches/main`, 16/11/2026: `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` (`server` e `web`). O job novo `e2e` ainda não é obrigatório | #27 (responsável) |
+| 11 | Testes dos fluxos críticos | Atende | CI do GitHub, run 43815752153 (commit `c01cc82`, 16/11/2026): `server` 10 de 10 (Jest), `web` 20 de 20 (Vitest) e 10 de 10 (Playwright do script único), `e2e` 3 de 3, sem `skipped` | — |
+| 12 | Documentação honesta | Atende | README com os comandos de `server/package.json` e `web/package.json` (inclusive `test:e2e`), conferidos em 16/11/2026. README e `docs/DEPLOY.md` dizem que a demo publicada é antiga e que a API não está no ar | — |
 
-**Atendidos:** 1, 2, 4, 6, 8, 9, 10, 11 e 12. **Parciais:** 3, 5 e 7.
+**Atendidos:** 1, 2, 4, 6, 8, 10, 11 e 12. **Parciais:** 3, 5, 7 e 9.
 
-**Por que "Finalizado: sim":** tudo o que o código resolve está feito. Os critérios 3, 5 e 7 dependem do responsável (#3, #11, #15), com o rótulo `depende-do-responsavel`. A medição no site (#13) vem depois da #11.
+**Por que "Finalizado: sim":** tudo o que o código resolve está feito. Os critérios 3, 5, 7 e 9 dependem do responsável (#3, #11, #15, #26), com o rótulo `depende-do-responsavel`. A medição no site (#13) vem depois da #11.
 
-**Vercel (diagnóstico de 10/11/2026, pela API do GitHub):** há dois projetos. O `nlw-8-impulse` (2022) serve a demo e não recebe deploy desde 16/05/2022. O `feedback-widget-lfke`, ligado em 28/09/2026, falhou em todos os deploys, sempre de 2 a 4 s depois de começar, antes da instalação. Um `vercel.json` com o build em `web/` não mudou nada (PR #24). A causa está na configuração do projeto; o passo a passo está na #11.
+**Vercel:** diagnóstico de 16/11/2026 e passo a passo em `docs/DEPLOY.md` e na #11. Todo deploy do projeto `feedback-widget-lfke` falha antes do build, sem log público; pela documentação da Vercel, isso é pré-condição de configuração, não código.
 
 ## Histórico
 
 Tabelas e revisões anteriores, mantidas como registro. O estado vale só na tabela do topo.
+
+### Estado de 10/11/2026, ciclo da faixa de 90%
+
+**Resumo declarado:** 9 de 12 (1, 2, 4, 6, 8, 9, 10, 11 e 12). **Finalizado:** sim. Revisto em 16/11/2026: o 9 estava "Atende" só pelo `npm audit`, com os alertas do Dependabot desligados (regra em decisão na engenharia#33), e o 8 citava axe sem teste de axe no repositório (só Lighthouse local e teclado). Com a régua, o estado real era 8 de 12.
 
 ### Estado de 10/11/2026, antes do ciclo da faixa de 90%
 
