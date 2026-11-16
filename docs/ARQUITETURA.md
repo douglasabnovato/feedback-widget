@@ -48,6 +48,7 @@ A arquitetura em camadas do projeto original foi mantida (caso de uso dependente
 - **ADR-003 — Limite coerente ponta a ponta:** o widget captura só a área visível (escala 1); a API aceita PNG até `MAX_SCREENSHOT_MB` e responde 413 acima disso.
 - **ADR-004 — Express 5** para que erros assíncronos cheguem ao handler central.
 - **ADR-005 — Prisma 6 com cliente carregado sob demanda.** Sem `DATABASE_URL`, a API usa o repositório em memória (útil para demonstração e testes).
+- **ADR-006 — Aceitar os alertas de desenvolvimento do Dependabot.** Arquivo próprio: [`adr/ADR-006-alertas-de-desenvolvimento-aceitos.md`](adr/ADR-006-alertas-de-desenvolvimento-aceitos.md). O `deepmerge` do Jest não chega à API publicada (16/11/2026).
 
 ## 5. Fora do escopo
 

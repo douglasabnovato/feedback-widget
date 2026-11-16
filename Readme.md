@@ -10,7 +10,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 
 ## Estado e próximos passos (ciclo de 16/11/2026)
 
-**No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 16/11/2026, mas é um build de 2022, de outro projeto da Vercel. O projeto novo (`feedback-widget-lfke`) falha em todo deploy antes do build, por configuração (#11). A API não está publicada (`/health` deu 404 em 16/11/2026, #3), então o envio pela demo falha. Critérios do MVP: 8 de 12 atendidos, Finalizado: não. Três parciais dependem de conta ou painel; o quarto é o 9: dos 10 alertas do Dependabot (ligados em 16/11/2026), 9 foram corrigidos na sprint (PR #33) e fecham com o merge na `main`, e 1 resta (`deepmerge`, baixa, só nos testes da API, sem versão corrigida; #32).
+**No ar:** https://nlw-8-impulse-nu.vercel.app/ respondeu 200 em 16/11/2026, mas é um build de 2022, de outro projeto da Vercel. O projeto novo (`feedback-widget-lfke`) falha em todo deploy antes do build, por configuração (#11). A API não está publicada (`/health` deu 404 em 16/11/2026, #3), então o envio pela demo falha. Critérios do MVP: 9 de 12 atendidos, Finalizado: sim. Três parciais dependem de conta ou painel; o 9 está em "Atende": dos 10 alertas do Dependabot (ligados em 16/11/2026), 9 foram corrigidos na sprint (PR #33) e fecham com o merge na `main`, e 1 (`deepmerge`, baixa, só nos testes da API, sem versão corrigida; #32) está aceito na [ADR-006](docs/adr/ADR-006-alertas-de-desenvolvimento-aceitos.md).
 
 **O que foi feito neste ciclo** (PR #30)
 - Teste de ponta a ponta da demo com a API real (job `e2e` no CI): envio com captura de tela, POST pelo navegador e axe na página, no diálogo e na confirmação.
@@ -27,7 +27,7 @@ Desafios da trilha Impulse 💜 da NLW 8 Return da Rocketseat.
 - #11 Corrigir o deploy da Vercel (responsável; passo a passo na issue).
 - #15 Criar a conta do GoatCounter (responsável).
 - #26 Ligar os alertas do Dependabot (ligados pelo responsável em 16/11/2026; falta fechar a issue).
-- #32 Resolver o alerta do Dependabot que resta (`deepmerge`, via Jest).
+- #32 O alerta do Dependabot que resta (`deepmerge`, via Jest): aceito na [ADR-006](docs/adr/ADR-006-alertas-de-desenvolvimento-aceitos.md) em 16/11/2026, por ser só de desenvolvimento.
 - #27 Exigir o job `e2e` na proteção da `main` (responsável).
 - #13 Medir LCP e acessibilidade da demo publicada, depois da #11.
 - #25 Validar com uma pessoa de fora.

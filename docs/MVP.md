@@ -1,10 +1,10 @@
 # MVP — Feedback Widget
 
-**Nível:** Vitrine (N2), 12 critérios. Estado em 16/11/2026 (ciclo de 16/11/2026, PR feature → sprint #30). Revisto em 16/11/2026, 12h38 (alertas do Dependabot, PR #33).
+**Nível:** Vitrine (N2), 12 critérios. Estado em 16/11/2026 (ciclo de 16/11/2026, PR feature → sprint #30). Revisto em 16/11/2026, 12h38 (alertas do Dependabot, PR #33), e às 15h08 (alerta de desenvolvimento aceito na ADR-006).
 
-**Resumo:** 8 de 12 aplicáveis atendidos
+**Resumo:** 9 de 12 aplicáveis atendidos
 
-**Finalizado:** não — 3 dos 4 parciais (3, 5 e 7) dependem do responsável e têm issue `depende-do-responsavel`: API no Render (#3), Vercel (#11) e GoatCounter (#15); depois, medir no site (#13). O 9 não: 9 alertas corrigidos esperam o merge na `main`, e 1 resta sem versão corrigida (#32)
+**Finalizado:** sim — os 3 parciais (3, 5 e 7) dependem do responsável e têm issue `depende-do-responsavel`: API no Render (#3), Vercel (#11) e GoatCounter (#15); depois, medir no site (#13). O 9 passou a "Atende" em 16/11/2026, 15h08: 9 alertas corrigidos na sprint-19 (PR #33) e 1 aceito na [ADR-006](adr/ADR-006-alertas-de-desenvolvimento-aceitos.md).
 
 **Hipótese:** acreditamos que quem vê o widget na demo envia um feedback sozinho em menos de 1 minuto (meta decidida no ciclo de 10/11/2026, D1, revisável pelo responsável na #15). **Saberemos quando** a pessoa de fora da #25 concluir o envio na demo publicada em menos de 1 minuto e o painel do GoatCounter (#15) mostrar, na primeira semana, visitas à demo e eventos `enviar-feedback`.
 
@@ -18,20 +18,24 @@
 | 6 | Falhas tratadas | Atende | `npx vitest run`, 16/11/2026: 20 de 20 (erro da API, comentário vazio, falha da captura de tela em `comentario.test.tsx`, sem apagar o erro de envio). No navegador, `fluxo.spec.ts`: erro de validação da API e falta de rede mostram aviso e mantêm o texto (3 de 3). Sem API publicada, a demo avisa (`app.test.tsx`) | — |
 | 7 | Desempenho aceitável | Parcial | Só medição local: Lighthouse 12.8.2 móvel (`vite preview`), 09/11/2026, LCP mediano 1,63 s, TBT 4 a 8 ms, elemento `main > p.mt-2`. No site publicado não há o que medir: a demo é o build de 2022 | #11 (responsável), #13 |
 | 8 | Acessibilidade básica | Atende | axe (`@axe-core/playwright`, WCAG 2 A e AA) dentro do `fluxo.spec.ts`, em largura de desktop (1280 px) e com a API real: página, diálogo aberto, hover do envio, confirmação e erro de rede, 0 violações (`npm run test:e2e`, 16/11/2026, e job `e2e` do run 43815752153, 16/11/2026). O teste achou contraste de 3,5:1 no hover de "Enviar feedback", corrigido para 6:1. Teclado: `web/e2e/teclado.spec.ts` (Tab, Shift+Tab, Esc, foco devolvido), `npm run test:widget`, 16/11/2026: 10 de 10. O app não tem tema escuro próprio (nenhum `prefers-color-scheme` no CSS), então o axe roda só no claro | #13 (site) |
-| 9 | Segurança e conformidade | Parcial | Alertas do Dependabot ligados em 16/11/2026: `gh api "repos/douglasabnovato/feedback-widget/dependabot/alerts?state=open&per_page=100"` às 12h38 deu 10 abertos, todos de desenvolvimento. 9 alertas corrigidos na sprint-19 (PR #33): `npm audit fix` no `web`, sem versão maior (`vite` 7.3.8, `vitest` 5.1.0, `source-map-js` 1.2.2, `postcss-selector-parser` 6.1.6; `npm audit` no `web`: 5 → 0); fecham com o merge na principal. 1 resta (#32): `deepmerge` 4.3.1 (baixa), do `jest` 29 no `server`, sem versão corrigida publicada. `npm audit --omit=dev`, 16/11/2026: 0 vulnerabilidades em `server` e `web`. No código: zod, escape no e-mail, CORS por lista, limite de envios, nenhum segredo; medição sem cookie e sem dado pessoal | #32 |
+| 9 | Segurança e conformidade | Atende | `gh api "repos/douglasabnovato/feedback-widget/dependabot/alerts?state=open&per_page=100"`, 16/11/2026, 15h08: 10 abertos, todos de desenvolvimento. 9 corrigidos na sprint-19 (PR #33): `npm audit fix` no `web`, sem versão maior (`vite` 7.3.8, `vitest` 5.1.0, `source-map-js` 1.2.2, `postcss-selector-parser` 6.1.6); fecham no merge na principal (conferido contra o lockfile da sprint: nenhuma versão vulnerável restante nesses 9). 1 aceito na [ADR-006](adr/ADR-006-alertas-de-desenvolvimento-aceitos.md): `deepmerge` 4.3.1 (baixa), do `jest` 29 no `server`, sem versão corrigida; `npm --prefix server ls deepmerge --omit=dev` deu `(empty)`. 0 sem decisão. `npm audit --omit=dev --package-lock-only`, 16/11/2026: 0 vulnerabilidades em `server` e `web`. No código: zod, escape no e-mail, CORS por lista, limite de envios, nenhum segredo; medição sem cookie e sem dado pessoal | #32 |
 | 10 | Entrega confiável | Atende | `gh api repos/douglasabnovato/feedback-widget/rules/branches/main`, 16/11/2026: `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` (`server` e `web`). O job novo `e2e` ainda não é obrigatório | #27 (responsável) |
 | 11 | Testes dos fluxos críticos | Atende | CI do GitHub, run 43815752153 (commit `c01cc82`, 16/11/2026): `server` 10 de 10 (Jest), `web` 20 de 20 (Vitest) e 10 de 10 (Playwright do script único), `e2e` 3 de 3, sem `skipped` | — |
 | 12 | Documentação honesta | Atende | README com os comandos de `server/package.json` e `web/package.json` (inclusive `test:e2e`), conferidos em 16/11/2026. README e `docs/DEPLOY.md` dizem que a demo publicada é antiga e que a API não está no ar | — |
 
-**Atendidos:** 1, 2, 4, 6, 8, 10, 11 e 12. **Parciais:** 3, 5, 7 e 9.
+**Atendidos:** 1, 2, 4, 6, 8, 9, 10, 11 e 12. **Parciais:** 3, 5 e 7.
 
-**Por que "Finalizado: não":** os critérios 3, 5 e 7 dependem do responsável (#3, #11, #15), com o rótulo `depende-do-responsavel`; a medição no site (#13) vem depois da #11. O 9 não depende só dele: os 9 alertas corrigidos fecham com o merge na `main`, e o do `deepmerge` (#32) sai trocando o Jest pelo Vitest ou com risco aceito em ADR pelo responsável.
+**Por que "Finalizado: sim":** os critérios 3, 5 e 7 dependem do responsável (#3, #11, #15), com o rótulo `depende-do-responsavel`; a medição no site (#13) vem depois da #11. O 9 está em "Atende": os 9 alertas corrigidos fecham com o merge na `main`, e o do `deepmerge` está aceito na ADR-006.
 
 **Vercel:** diagnóstico de 16/11/2026 e passo a passo em `docs/DEPLOY.md` e na #11. Todo deploy do projeto `feedback-widget-lfke` falha antes do build, sem log público; pela documentação da Vercel, isso é pré-condição de configuração, não código.
 
 ## Histórico
 
 Tabelas e revisões anteriores, mantidas como registro. O estado vale só na tabela do topo.
+
+### Revisão de 16/11/2026, 15h08 (regra geral por ADR)
+
+Antes: **Resumo** 8 de 12, **Finalizado:** não, com o 9 em "Parcial" por 1 alerta sem decisão (#32). Depois: o `deepmerge` do Jest, só de desenvolvimento, aceito na ADR-006 pela regra geral do responsável; 9 corrigidos na sprint-19 (PR #33); 0 sem decisão. O 9 vai para "Atende", **Resumo** 9 de 12 e **Finalizado:** sim (os 3 parciais dependem do responsável, com issue).
 
 ### Revisão de 16/11/2026, 12h38 (alertas do Dependabot)
 
