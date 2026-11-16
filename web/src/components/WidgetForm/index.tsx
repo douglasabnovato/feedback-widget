@@ -1,5 +1,5 @@
 /* Formulário do widget em três passos: tipo, conteúdo e sucesso */
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import bugImageUrl from "../../assets/bug.svg";
 import ideaImageUrl from "../../assets/idea.svg";
@@ -20,6 +20,8 @@ export type FeedbackType = keyof typeof feedbackTypes;
 export function WidgetForm() {
     const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
     const [feedbackSent, setFeedbackSent] = useState(false);
+    /* Cada passo põe este id no seu título, que dá nome ao diálogo */
+    const titleId = useId();
 
     /* Volta ao primeiro passo */
     function handleRestartFeedback() {
@@ -28,13 +30,14 @@ export function WidgetForm() {
     }
 
     return (
-        <div className="bg-zinc-900 p-4 relative rounded-2xl mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto">
+        <div role="dialog" aria-labelledby={titleId} className="bg-zinc-900 p-4 relative rounded-2xl mb-4 flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto">
             {feedbackSent ? (
-                <FeedbackSuccessStep onFeedbackRestartRequested={handleRestartFeedback} />
+                <FeedbackSuccessStep titleId={titleId} onFeedbackRestartRequested={handleRestartFeedback} />
             ) : !feedbackType ? (
-                <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType} />
+                <FeedbackTypeStep titleId={titleId} onFeedbackTypeChanged={setFeedbackType} />
             ) : (
                 <FeedbackContentStep
+                    titleId={titleId}
                     feedbackType={feedbackType}
                     onFeedbackRestartRequested={handleRestartFeedback}
                     onFeedbackSent={() => setFeedbackSent(true)}
