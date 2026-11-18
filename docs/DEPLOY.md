@@ -107,7 +107,7 @@ Conferido e mantido: o build da API roda `npm ci && npm run build && npm run mig
 3. `cp .env.example .env` e preencher `DATABASE_URL` (Neon), `MAIL_USER`, `MAIL_PASS` e `MAIL_TO` (Etapa 0). Sem `DATABASE_URL`, a API guarda em memória.
 4. `npm run migrate` (aplica as 2 migrações) e `npm run dev` (porta 3333)
 5. Em outro terminal: `cd ../web && npm ci && npm test && npm run build` (20 testes Vitest)
-6. `npm run build:widget && npx playwright install chromium && npm run test:widget` (10 testes do script único)
+6. `npm run build:widget && npx playwright install chromium && npm run test:widget` (12 testes do script único)
 7. `npm run test:e2e` (3 testes: a demo e a API sobem sozinhas nas portas 4391 e 3391, com POST real e axe)
 8. `cp .env.example .env && npm run dev`, abrir `http://localhost:5173`, enviar um feedback e ver o e-mail chegar no Mailtrap.
 
