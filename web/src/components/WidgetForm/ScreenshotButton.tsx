@@ -7,9 +7,11 @@ import { Loading } from "../Loading";
 interface ScreenshotButtonProps {
     screenshot: string | null;
     onScreenshotTook: (screenshot: string | null) => void;
+    /* Chamado quando a captura falha (página com conteúdo que o html2canvas não lê, por exemplo) */
+    onScreenshotFailed?: () => void;
 }
 
-export function ScreenshotButton({ screenshot, onScreenshotTook }: ScreenshotButtonProps) {
+export function ScreenshotButton({ screenshot, onScreenshotTook, onScreenshotFailed }: ScreenshotButtonProps) {
     const [isTakingScreenshot, setIsTakingScreenshot] = useState(false);
 
     /* Gera PNG só da janela visível, em escala 1, para caber no limite da API */
@@ -24,6 +26,8 @@ export function ScreenshotButton({ screenshot, onScreenshotTook }: ScreenshotBut
                 height: window.innerHeight,
             });
             onScreenshotTook(canvas.toDataURL("image/png"));
+        } catch {
+            onScreenshotFailed?.();
         } finally {
             setIsTakingScreenshot(false);
         }

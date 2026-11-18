@@ -1,37 +1,49 @@
 # MVP — Feedback Widget
 
-**Nível:** Vitrine (N2), 12 critérios. Estado em 10/11/2026 (ciclo da faixa de 90%, decisões D1 a D7 em `engenharia/decisoes/2026-11-10-ciclo-faixa-90.md`).
+**Nível:** Vitrine (N2), 12 critérios. Estado em 16/11/2026 (ciclo de 16/11/2026, PR feature → sprint #30). Revisto em 16/11/2026, 12h38 (alertas do Dependabot, PR #33), e às 15h08 (alerta de desenvolvimento aceito na ADR-006). Revisto em 18/11/2026: captura, contador e falha da captura testados no script único (#29), sem mudar a contagem.
 
 **Resumo:** 9 de 12 aplicáveis atendidos
 
-**Finalizado:** sim — faltam 3, 5 e 7, que dependem do responsável: publicar a API (#3), corrigir a Vercel (#11) e criar a conta do GoatCounter (#15); depois, medir no site (#13)
+**Finalizado:** sim — os 3 parciais (3, 5 e 7) dependem do responsável e têm issue `depende-do-responsavel`: API no Render (#3), Vercel (#11) e GoatCounter (#15); depois, medir no site (#13). O 9 passou a "Atende" em 16/11/2026, 15h08: 9 alertas corrigidos na sprint-19 (PR #33) e 1 aceito na [ADR-006](adr/ADR-006-alertas-de-desenvolvimento-aceitos.md).
 
-**Hipótese (meta do ciclo, texto da proposta mantido):** quem vê o widget na demo envia um feedback em menos de 1 minuto. Saberemos pelo GoatCounter: visitas à demo e o evento `enviar-feedback`, depois que a API estiver no ar.
+**Hipótese:** acreditamos que quem vê o widget na demo envia um feedback sozinho em menos de 1 minuto (meta decidida no ciclo de 10/11/2026, D1, revisável pelo responsável na #15). **Saberemos quando** a pessoa de fora da #25 concluir o envio na demo publicada em menos de 1 minuto e o painel do GoatCounter (#15) mostrar, na primeira semana, visitas à demo e eventos `enviar-feedback`.
 
-| # | Critério | Situação em 10/11/2026 | Evidência ou o que falta | Issue |
+| # | Critério | Situação em 16/11/2026 | Evidência ou o que falta | Issue |
 |---|---|---|---|---|
 | 1 | Problema e público claros | Atende | Donos de site recebem feedback dos visitantes, com captura de tela, por um widget pequeno | — |
-| 2 | Hipótese a validar | Atende | Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável: a hipótese acima | #15 |
-| 3 | Fluxo principal completo | Parcial | Playwright do script único percorre o envio, inclusive só com teclado: `npx playwright test` em `web`, 10/11/2026, 10 de 10 (também no CI, job `web`). Falta o site: a API não está publicada (`curl https://feedback-widget-api.onrender.com/health`, 10/11/2026: 404) e a demo é um build antigo | #3, #11 (responsável); validação com pessoa de fora: #25 |
+| 2 | Hipótese a validar | Atende | Hipótese acima, com meta (menos de 1 minuto) e "saberemos quando" | #15, #25 |
+| 3 | Fluxo principal completo | Parcial | No navegador, contra a API real: `web/e2e-fluxo/fluxo.spec.ts` abre a demo, escolhe "Problema", escreve, tira a captura, envia (POST com CORS de verdade, resposta 201) e confere a gravação no `/health`. `npm run test:e2e`, 16/11/2026: 3 de 3; no CI, job `e2e` do run 43815752153 (commit `c01cc82`, 16/11/2026: 3 de 3). Falta o site: `curl https://feedback-widget-api.onrender.com/health`, 16/11/2026: 404 (API não publicada) e a demo da Vercel é um build de 2022 (decisão D2: o 3 vale com o fluxo no site) | #3, #11 (responsável); #25 |
 | 4 | Escopo enxuto | Atende | Widget e API, sem painel (seção "Fora do MVP" no Histórico) | — |
-| 5 | Medição de uso | Parcial | Código pronto; falta a conta (decisão D5). GoatCounter sem cookie (`web/src/lib/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-feedback`; `npx vitest run`, 10/11/2026: 15 de 15, incluindo `medicao.test.ts` (não carrega nos testes nem em localhost) | #15 (responsável) |
-| 6 | Falhas tratadas | Atende | O widget mostra erro de envio e aviso sem API, com testes em `web/src/__tests__` (`npx vitest run`: 15 de 15 em 10/11/2026) | — |
-| 7 | Desempenho aceitável | Parcial | Lighthouse 12.8.2 móvel local (`vite preview` do build), 09/11/2026: LCP 1,69 / 1,65 / 1,58 / 1,61 s (mediana 1,63 s), TBT 4 a 8 ms, elemento `main > p.mt-2`. No site, só depois que a Vercel voltar a publicar (D6) | #11 (responsável), #13 |
-| 8 | Acessibilidade básica | Atende | Formulário é um diálogo com nome do passo e foco inicial no primeiro tipo; Esc só fecha com o foco no widget (ou sem foco); Tab circula dentro dele (#18, #14). `npx playwright test` em 10/11/2026: 10 de 10. Lighthouse local: acessibilidade 100 nas 4 execuções | #13 (site) |
-| 9 | Segurança e conformidade | Atende | zod, escape no e-mail, CORS por lista e limite de envios, com testes da API. `npm audit --omit=dev`, 10/11/2026: 0 vulnerabilidades em `web` e em `server`. Medição sem cookie e sem dado pessoal | — |
-| 10 | Entrega confiável | Atende | `gh api repos/douglasabnovato/feedback-widget/rules/branches/main`, 10/11/2026: regras `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` (`server` e `web`). A Vercel só recebe na `main` o que passou no CI | #12 (proteção, feita) |
-| 11 | Testes dos fluxos críticos | Atende | CI do GitHub: 10 testes da API, 15 do web e 10 Playwright do script único | — |
-| 12 | Documentação honesta | Atende | README e este arquivo dizem que a demo publicada é antiga e que a API não está no ar | — |
+| 5 | Medição de uso | Parcial | Código pronto: GoatCounter sem cookie (`web/src/lib/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-feedback` (`medicao.test.ts`). Falta a conta, e o painel não mostra visitas | #15 (responsável) |
+| 6 | Falhas tratadas | Atende | `npx vitest run`, 16/11/2026: 20 de 20 (erro da API, comentário vazio, falha da captura de tela em `comentario.test.tsx`, sem apagar o erro de envio). No navegador, `fluxo.spec.ts`: erro de validação da API e falta de rede mostram aviso e mantêm o texto (3 de 3). Sem API publicada, a demo avisa (`app.test.tsx`). No script único (Shadow DOM), `web/e2e/captura.spec.ts`: com o html2canvas falhando (cor CSS `oklch()`, que ele não lê), aparece "Não foi possível capturar a tela" e envia sem a captura (`npm run test:widget`, 18/11/2026: 12 de 12; o teste falha sem o aviso) | — |
+| 7 | Desempenho aceitável | Parcial | Só medição local: Lighthouse 12.8.2 móvel (`vite preview`), 09/11/2026, LCP mediano 1,63 s, TBT 4 a 8 ms, elemento `main > p.mt-2`. No site publicado não há o que medir: a demo é o build de 2022 | #11 (responsável), #13 |
+| 8 | Acessibilidade básica | Atende | axe (`@axe-core/playwright`, WCAG 2 A e AA) dentro do `fluxo.spec.ts`, em largura de desktop (1280 px) e com a API real: página, diálogo aberto, hover do envio, confirmação e erro de rede, 0 violações (`npm run test:e2e`, 16/11/2026, e job `e2e` do run 43815752153, 16/11/2026). O teste achou contraste de 3,5:1 no hover de "Enviar feedback", corrigido para 6:1. Teclado: `web/e2e/teclado.spec.ts` (Tab, Shift+Tab, Esc, foco devolvido), `npm run test:widget`, 16/11/2026: 10 de 10 (18/11/2026: 12 de 12, com `captura.spec.ts`). O app não tem tema escuro próprio (nenhum `prefers-color-scheme` no CSS), então o axe roda só no claro | #13 (site) |
+| 9 | Segurança e conformidade | Atende | `gh api "repos/douglasabnovato/feedback-widget/dependabot/alerts?state=open&per_page=100"`, 16/11/2026, 15h08: 10 abertos, todos de desenvolvimento. 9 corrigidos na sprint-19 (PR #33): `npm audit fix` no `web`, sem versão maior (`vite` 7.3.8, `vitest` 5.1.0, `source-map-js` 1.2.2, `postcss-selector-parser` 6.1.6); fecham no merge na principal (conferido contra o lockfile da sprint: nenhuma versão vulnerável restante nesses 9). 1 aceito na [ADR-006](adr/ADR-006-alertas-de-desenvolvimento-aceitos.md): `deepmerge` 4.3.1 (baixa), do `jest` 29 no `server`, sem versão corrigida; `npm --prefix server ls deepmerge --omit=dev` deu `(empty)`. 0 sem decisão. `npm audit --omit=dev --package-lock-only`, 16/11/2026: 0 vulnerabilidades em `server` e `web`. No código: zod, escape no e-mail, CORS por lista, limite de envios, nenhum segredo; medição sem cookie e sem dado pessoal | #32 |
+| 10 | Entrega confiável | Atende | `gh api repos/douglasabnovato/feedback-widget/rules/branches/main`, 16/11/2026: `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` (`server` e `web`). O job novo `e2e` ainda não é obrigatório | #27 (responsável) |
+| 11 | Testes dos fluxos críticos | Atende | CI do GitHub, run 43815752153 (commit `c01cc82`, 16/11/2026): `server` 10 de 10 (Jest), `web` 20 de 20 (Vitest) e 10 de 10 (Playwright do script único), `e2e` 3 de 3, sem `skipped`. Em 18/11/2026, `web/e2e/captura.spec.ts` (#29) leva o script único a 12 testes: captura dentro do Shadow DOM com POST de um PNG, contador "Restam 986 caracteres" e falha da captura (`npm run test:widget` local: 12 de 12; no CI, job `web` do PR #35) | — |
+| 12 | Documentação honesta | Atende | README com os comandos de `server/package.json` e `web/package.json` (inclusive `test:e2e`), conferidos em 16/11/2026. README e `docs/DEPLOY.md` dizem que a demo publicada é antiga e que a API não está no ar | — |
 
 **Atendidos:** 1, 2, 4, 6, 8, 9, 10, 11 e 12. **Parciais:** 3, 5 e 7.
 
-**Por que "Finalizado: sim":** tudo o que o código resolve está feito. Os critérios 3, 5 e 7 dependem do responsável (#3, #11, #15), com o rótulo `depende-do-responsavel`. A medição no site (#13) vem depois da #11.
+**Por que "Finalizado: sim":** os critérios 3, 5 e 7 dependem do responsável (#3, #11, #15), com o rótulo `depende-do-responsavel`; a medição no site (#13) vem depois da #11. O 9 está em "Atende": os 9 alertas corrigidos fecham com o merge na `main`, e o do `deepmerge` está aceito na ADR-006.
 
-**Vercel (diagnóstico de 10/11/2026, pela API do GitHub):** há dois projetos. O `nlw-8-impulse` (2022) serve a demo e não recebe deploy desde 16/05/2022. O `feedback-widget-lfke`, ligado em 28/09/2026, falhou em todos os deploys, sempre de 2 a 4 s depois de começar, antes da instalação. Um `vercel.json` com o build em `web/` não mudou nada (PR #24). A causa está na configuração do projeto; o passo a passo está na #11.
+**Vercel:** diagnóstico de 16/11/2026 e passo a passo em `docs/DEPLOY.md` e na #11. Todo deploy do projeto `feedback-widget-lfke` falha antes do build, sem log público; pela documentação da Vercel, isso é pré-condição de configuração, não código.
 
 ## Histórico
 
 Tabelas e revisões anteriores, mantidas como registro. O estado vale só na tabela do topo.
+
+### Revisão de 16/11/2026, 15h08 (regra geral por ADR)
+
+Antes: **Resumo** 8 de 12, **Finalizado:** não, com o 9 em "Parcial" por 1 alerta sem decisão (#32). Depois: o `deepmerge` do Jest, só de desenvolvimento, aceito na ADR-006 pela regra geral do responsável; 9 corrigidos na sprint-19 (PR #33); 0 sem decisão. O 9 vai para "Atende", **Resumo** 9 de 12 e **Finalizado:** sim (os 3 parciais dependem do responsável, com issue).
+
+### Revisão de 16/11/2026, 12h38 (alertas do Dependabot)
+
+Antes: **Resumo** 8 de 12, **Finalizado:** sim, com o 9 em "Parcial" por alertas desligados (403, #26). Depois: alertas ligados, 10 abertos; 9 corrigidos na sprint-19 (PR #33), 1 resta (#32). O 9 segue "Parcial" e o Finalizado cai para "não". Resumo segue 8 de 12.
+
+### Estado de 10/11/2026, ciclo da faixa de 90%
+
+**Resumo declarado:** 9 de 12 (1, 2, 4, 6, 8, 9, 10, 11 e 12). **Finalizado:** sim. Revisto em 16/11/2026: o 9 estava "Atende" só pelo `npm audit`, com os alertas do Dependabot desligados (regra em decisão na engenharia#33), e o 8 citava axe sem teste de axe no repositório (só Lighthouse local e teclado). Com a régua, o estado real era 8 de 12.
 
 ### Estado de 10/11/2026, antes do ciclo da faixa de 90%
 

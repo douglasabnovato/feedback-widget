@@ -1,4 +1,4 @@
-# CI: testes e typecheck da API; testes e build do widget
+# CI: testes e typecheck da API; testes e build do widget; fluxo da demo com a API real (e2e)
 name: CI
 on:
   push:
@@ -42,3 +42,25 @@ jobs:
       - run: npm run build:widget
       - run: npx playwright install --with-deps chromium
       - run: npm run test:widget
+  e2e:
+    # Demo (vite preview) + API real (repositório em memória), POST pelo navegador e axe
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            server/package-lock.json
+            web/package-lock.json
+      - run: npm ci
+        working-directory: server
+      - run: npx prisma generate
+        working-directory: server
+      - run: npm ci
+        working-directory: web
+      - run: npx playwright install --with-deps chromium
+        working-directory: web
+      - run: npm run test:e2e
+        working-directory: web
